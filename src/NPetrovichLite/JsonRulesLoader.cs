@@ -27,7 +27,7 @@ namespace NPetrovichLite
             }
         }
 
-        private readonly RulesContainer m_data;
+        private readonly RulesContainer m_data = new RulesContainer();
 
         private readonly JsonParser m_parser;
 
