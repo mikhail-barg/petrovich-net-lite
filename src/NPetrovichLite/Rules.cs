@@ -41,13 +41,29 @@ namespace NPetrovichLite
             m_modifiers = modifiers;
         }
 
-        public abstract bool Matches(string nameChunk, Gender gender, Tags tags);
-
-        protected bool TagsMatch(Tags tags)
+        public bool Matches(string nameChunk, Gender gender, Tags tags)
         {
-            //TODO: check gender as well!!!
-            throw new NotImplementedException();
+            //return false if gender == :male && match_gender == :female
+            if (m_gender == Gender.Male && gender == Gender.Female)
+            {
+                return false;
+            }
+
+            //return false if gender == :female && match_gender != :female
+            if (m_gender == Gender.Female && gender != Gender.Female)
+            {
+                return false;
+            }
+
+            if ((tags | m_tags) != tags)
+            {
+                return false;
+            }
+
+            return MatchesInternal(nameChunk);
         }
+
+        protected abstract bool MatchesInternal(string nameChunk);
 
         public string Inflect(string nameChunk, Case targetCase)
         {
@@ -69,13 +85,8 @@ namespace NPetrovichLite
             m_testWords = testWords;
         }
 
-        public override bool Matches(string nameChunk, Gender gender, Tags tags)
+        protected override bool MatchesInternal(string nameChunk)
         {
-            if (!TagsMatch(tags))
-            {
-                return false;
-            }
-
             for (int i = 0; i < m_testWords.Length; ++i)
             {
                 if (m_testWords.Equals(nameChunk))
@@ -97,13 +108,8 @@ namespace NPetrovichLite
             m_testSuffixes = testSuffixes;
         }
 
-        public override bool Matches(string nameChunk, Gender gender, Tags tags)
+        protected override bool MatchesInternal(string nameChunk)
         {
-            if (!TagsMatch(tags))
-            {
-                return false;
-            }
-
             for (int i = 0; i < m_testSuffixes.Length; ++i)
             {
                 if (nameChunk.EndsWith(m_testSuffixes[i]))
