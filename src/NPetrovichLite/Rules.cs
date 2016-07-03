@@ -10,7 +10,11 @@ namespace NPetrovichLite
     {
         private readonly PartRules[] m_partRules = new PartRules[Enum.GetValues(typeof(NamePart)).Length];
 
-        internal PartRules this[NamePart part] { get { return m_partRules[(int)part]; } }
+        internal PartRules this[NamePart part]
+        {
+            get { return m_partRules[(int)part]; }
+            set { m_partRules[(int)part] = value; }
+        }
     }
 
     internal sealed class PartRules : List<IRule>
@@ -39,6 +43,12 @@ namespace NPetrovichLite
 
         public abstract bool Matches(string nameChunk, Gender gender, Tags tags);
 
+        protected bool TagsMatch(Tags tags)
+        {
+            //TODO: check gender as well!!!
+            throw new NotImplementedException();
+        }
+
         public string Inflect(string nameChunk, Case targetCase)
         {
             if (targetCase == Case.Nominative)
@@ -61,6 +71,11 @@ namespace NPetrovichLite
 
         public override bool Matches(string nameChunk, Gender gender, Tags tags)
         {
+            if (!TagsMatch(tags))
+            {
+                return false;
+            }
+
             for (int i = 0; i < m_testWords.Length; ++i)
             {
                 if (m_testWords.Equals(nameChunk))
@@ -84,6 +99,11 @@ namespace NPetrovichLite
 
         public override bool Matches(string nameChunk, Gender gender, Tags tags)
         {
+            if (!TagsMatch(tags))
+            {
+                return false;
+            }
+
             for (int i = 0; i < m_testSuffixes.Length; ++i)
             {
                 if (nameChunk.EndsWith(m_testSuffixes[i]))
