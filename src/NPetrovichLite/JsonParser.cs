@@ -156,6 +156,7 @@ namespace NPetrovichLite
                 return false;
             }
             startingChar = m_buffer[m_bufferPos];
+            ++m_bufferPos;
             return true;
         }
 

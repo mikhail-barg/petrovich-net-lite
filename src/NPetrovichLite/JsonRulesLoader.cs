@@ -150,6 +150,7 @@ namespace NPetrovichLite
             {
                 result[i] = ParseModifier(m_parser.GetNextPropertyValue());
             }
+            m_parser.AssertNextTokenTypeAndConsume(JsonParser.TokenType.ArrayEnd);
             return result;
         }
 

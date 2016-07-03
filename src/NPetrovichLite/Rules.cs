@@ -89,7 +89,7 @@ namespace NPetrovichLite
         {
             for (int i = 0; i < m_testWords.Length; ++i)
             {
-                if (m_testWords.Equals(nameChunk))
+                if (String.Equals(m_testWords[i], nameChunk, StringComparison.InvariantCultureIgnoreCase))
                 {
                     return true;
                 }
@@ -112,7 +112,7 @@ namespace NPetrovichLite
         {
             for (int i = 0; i < m_testSuffixes.Length; ++i)
             {
-                if (nameChunk.EndsWith(m_testSuffixes[i]))
+                if (nameChunk.EndsWith(m_testSuffixes[i], StringComparison.InvariantCultureIgnoreCase))
                 {
                     return true;
                 }

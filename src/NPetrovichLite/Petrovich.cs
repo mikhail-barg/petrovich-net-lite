@@ -6,11 +6,18 @@ using System.Threading.Tasks;
 
 namespace NPetrovichLite
 {
-    public static class Petrovich
+    public class Petrovich
     {
         private static readonly char[] NAME_CHUNK_SPLIT = { '-' };
 
-        private static string InflectNamePart(string namePartValue, NamePart namePart, Gender gender, Case targetCase, RulesContainer rules)
+        private readonly RulesContainer m_rules;
+
+        public Petrovich()
+        {
+            m_rules = JsonRulesLoader.LoadEmbeddedResource();
+        }
+
+        public string InflectNamePart(string namePartValue, NamePart namePart, Gender gender, Case targetCase)
         {
             if (namePartValue == null)
             {
@@ -22,8 +29,8 @@ namespace NPetrovichLite
                 throw new ArgumentException("name part is whitespace or empty", nameof(namePartValue));
             }
             */
-            PartRules partRules = rules[namePart];
-            string[] chunks = namePartValue.ToLower().Split(NAME_CHUNK_SPLIT);
+            PartRules partRules = m_rules[namePart];
+            string[] chunks = namePartValue.Split(NAME_CHUNK_SPLIT);
             for (int i = 0; i < chunks.Length; ++i)
             {
                 Tags tags = i == 0 ? Tags.FirstWord : Tags.None;
