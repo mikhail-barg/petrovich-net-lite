@@ -1,50 +1,40 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NPetrovichLite;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using NUnit.Framework;
 
-namespace NPetrovichLiteTest
+namespace NPetrovichLite.Tests
 {
-    [TestClass]
-    public class LastNames
+    [TestFixture]
+    public sealed class InflectSinglePart
     {
         private Petrovich petrovich;
 
-        [TestInitialize]
+        [OneTimeSetUp]
         public void Init()
         {
             petrovich = new Petrovich();
         }
 
-        [TestMethod]
+        [Test]
         public void Test01()
         {
             Assert.AreEqual("Иванов", petrovich.InflectNamePart("Иванов", NamePart.LastName, Gender.Male, Case.Nominative));
-        }
-        [TestMethod]
-        public void Test02()
-        {
             Assert.AreEqual("Иванова", petrovich.InflectNamePart("Иванов", NamePart.LastName, Gender.Male, Case.Genitive));
-        }
-        [TestMethod]
-        public void Test03()
-        {
             Assert.AreEqual("Иванову", petrovich.InflectNamePart("Иванов", NamePart.LastName, Gender.Male, Case.Dative));
-        }
-        [TestMethod]
-        public void Test04()
-        {
             Assert.AreEqual("Иванова", petrovich.InflectNamePart("Иванов", NamePart.LastName, Gender.Male, Case.Accusative));
-        }
-        [TestMethod]
-        public void Test05()
-        {
             Assert.AreEqual("Ивановым", petrovich.InflectNamePart("Иванов", NamePart.LastName, Gender.Male, Case.Instrumental));
-        }
-        [TestMethod]
-        public void Test06()
-        {
             Assert.AreEqual("Иванове", petrovich.InflectNamePart("Иванов", NamePart.LastName, Gender.Male, Case.Prepositional));
         }
-        
+
+        [Test]
+        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.LastNamesData))]
+        public void LastNames(string value, NamePart part, Gender gender, Case targetCase, string expected)
+        {
+            string result = petrovich.InflectNamePart(value, part, gender, targetCase);
+            Assert.AreEqual(expected, result, string.Format("Part: {0}, Gender: {1}, Case: {2}", part, gender, targetCase));
+        }
     }
 }
