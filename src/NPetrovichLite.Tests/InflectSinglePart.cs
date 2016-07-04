@@ -16,7 +16,6 @@ namespace NPetrovichLite.Tests
         [OneTimeSetUp]
         public void Init()
         {
-            //petrovich = new Petrovich(@"c:\Dev\_Projects\petrovich-net\src\rules\rules.json");
             petrovich = new Petrovich();
         }
 
@@ -32,11 +31,14 @@ namespace NPetrovichLite.Tests
         }
 
         [Test]
-        [TestCaseSource(typeof(TestDataFactory), "LastNamesData"/*nameof(TestDataFactory.LastNamesData)*/)]
+        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.LastNamesData))]
+        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.FirstNamesData))]
+        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.MidNamesData))]
         public void LastNames(string value, NamePart part, Gender gender, Case targetCase, string expected)
         {
             string result = petrovich.InflectNamePart(value, part, gender, targetCase);
             Assert.AreEqual(expected, result, string.Format("Part: {0}, Gender: {1}, Case: {2}", part, gender, targetCase));
         }
+
     }
 }

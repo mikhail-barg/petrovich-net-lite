@@ -12,7 +12,7 @@ namespace NPetrovichLite.Tests.App
         {
             //Petrovich petrovich = new Petrovich(@"c:\Dev\_Projects\petrovich-net\src\rules\rules.json");
             Petrovich petrovich = new Petrovich();
-            string result = petrovich.InflectNamePart("Добробаба", NamePart.LastName, Gender.Male, Case.Dative);
+            string result = petrovich.InflectNamePart("Маша", NamePart.FirstName, Gender.Female, Case.Instrumental);
             Console.WriteLine(result);
         }
     }

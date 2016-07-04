@@ -15,6 +15,16 @@ namespace NPetrovichLite.Tests
             return ReadSinglePartData("LastNames.csv", NamePart.LastName);
         }
 
+        public static IEnumerable FirstNamesData()
+        {
+            return ReadSinglePartData("FirstNames.csv", NamePart.FirstName);
+        }
+
+        public static IEnumerable MidNamesData()
+        {
+            return ReadSinglePartData("MiddleNames.csv", NamePart.MiddleName);
+        }
+
         private static IEnumerable ReadSinglePartData(string fileName, NamePart part)
         {
             using (StreamReader reader = new StreamReader(Path.Combine("Data", fileName)))

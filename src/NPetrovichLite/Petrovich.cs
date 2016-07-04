@@ -26,7 +26,7 @@ namespace NPetrovichLite
         {
             if (namePartValue == null)
             {
-                throw new ArgumentNullException(/*nameof(namePartValue)*/ "namePartValue");
+                throw new ArgumentNullException(nameof(namePartValue));
             }
             /*
             if (string.IsNullOrWhiteSpace(namePartValue))
