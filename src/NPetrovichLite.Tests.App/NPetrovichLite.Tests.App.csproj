@@ -56,6 +56,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NPetrovichLite.Tests\NPetrovichLite.Tests.csproj">
+      <Project>{d9c6df5d-81e0-40f8-a888-7b186d19e7cc}</Project>
+      <Name>NPetrovichLite.Tests</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NPetrovichLite\NPetrovichLite.csproj">
       <Project>{41820b71-81dc-425a-84c7-1d1f8d2714a0}</Project>
       <Name>NPetrovichLite</Name>
