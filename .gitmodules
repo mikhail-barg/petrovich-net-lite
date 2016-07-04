@@ -1,3 +1,4 @@
 [submodule "src/rules"]
 	path = src/rules
 	url = https://github.com/petrovich/petrovich-rules.git
+	branch = v1
