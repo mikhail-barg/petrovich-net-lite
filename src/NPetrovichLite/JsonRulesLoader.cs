@@ -191,14 +191,12 @@ namespace NPetrovichLite
             {
                 string rulePartName = m_parser.GetNextPropertyName();
                 NamePart rulePart = ParseNamePart(rulePartName);
-                GenderRules rules = ParseGenderRules();
-                m_data.genderRules[rulePart] = rules;
+                ParseGenderRules(m_data.genderRules[rulePart]);
             }
         }
 
-        private GenderRules ParseGenderRules()
+        private ParseGenderRules(GenderRules rules)
         {
-            GenderRules result = new GenderRules();
             m_parser.AssertNextTokenTypeAndConsume(JsonParser.TokenType.ObjectStart);
             while (!m_parser.CheckNextTokenTypeAndConsumeIfTrue(JsonParser.TokenType.ObjectEnd))
             {
@@ -208,13 +206,13 @@ namespace NPetrovichLite
                 while (!m_parser.CheckNextTokenTypeAndConsumeIfTrue(JsonParser.TokenType.ArrayEnd))
                 {
                     string suffix = m_parser.GetNextStringValue();
-                    if (result.ContainsKey(suffix))
+                    if (rules.ContainsKey(suffix))
                     {
                         throw new ParseException(String.Format("Duplicate suffix '{0}' for gender {1}", suffix, gender));
                     }
+                    rules.Add(suffix, gender);
                 }
             }
-            return result;
         }
 
         private static Tags ParseTagsValue(string value)

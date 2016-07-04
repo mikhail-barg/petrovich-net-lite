@@ -162,12 +162,20 @@ namespace NPetrovichLite
 
     internal sealed class GenderRulesContainer
     {
-        private readonly GenderRules[] m_rulesByNamePart = new GenderRules[Enum.GetValues(typeof(NamePart)).Length];
+        private readonly GenderRules[] m_rulesByNamePart;
+
+        internal GenderRulesContainer()
+        {
+            m_rulesByNamePart = new GenderRules[Enum.GetValues(typeof(NamePart)).Length];
+            for (int i = 0; i < m_rulesByNamePart.Length; ++i)
+            {
+                m_rulesByNamePart[i] = new GenderRules();
+            }
+        }
 
         internal GenderRules this[NamePart part]
         {
             get { return m_rulesByNamePart[(int)part]; }
-            set { m_rulesByNamePart[(int)part] = value; }
         }
     }
 
