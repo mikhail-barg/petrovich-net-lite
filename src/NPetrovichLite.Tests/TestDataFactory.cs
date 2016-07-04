@@ -27,7 +27,7 @@ namespace NPetrovichLite.Tests
 
         private static IEnumerable ReadSinglePartData(string fileName, NamePart part)
         {
-            using (StreamReader reader = new StreamReader(Path.Combine("Data", fileName)))
+            using (StreamReader reader = new StreamReader(Path.Combine(NUnit.Framework.TestContext.CurrentContext.TestDirectory, "Data", fileName)))
             {
                 string line;
                 while ((line = reader.ReadLine()) != null)
@@ -49,7 +49,7 @@ namespace NPetrovichLite.Tests
 
         public static IEnumerable ReadSurnamesData()
         {
-            using (StreamReader reader = new StreamReader(Path.Combine("Data", "surnames.tsv")))
+            using (StreamReader reader = new StreamReader(Path.Combine(NUnit.Framework.TestContext.CurrentContext.TestDirectory, "Data", "surnames.tsv")))
             {
                 string line;
                 line = reader.ReadLine();  //skip header
