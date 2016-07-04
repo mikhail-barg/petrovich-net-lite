@@ -210,12 +210,7 @@ namespace NPetrovichLite
                     string suffix = m_parser.GetNextStringValue();
                     if (result.ContainsKey(suffix))
                     {
-                        //TODO: warn?
-                        Console.WriteLine(suffix);
-                    }
-                    else
-                    {
-                        result.Add(suffix, gender);
+                        throw new ParseException(String.Format("Duplicate suffix '{0}' for gender {1}", suffix, gender));
                     }
                 }
             }
