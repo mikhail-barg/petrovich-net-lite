@@ -17,8 +17,8 @@ namespace NPetrovichLite
             ArrayStart,     //[
             ArrayEnd,       //]
             PropertyName,   // "<property_name>" : 
-            PropertyValueString,
-            //PropertyValueNumber //no need right now
+            StringValue,
+            //NumericValue  //no need right now
         }
 
         internal struct Token
@@ -63,9 +63,9 @@ namespace NPetrovichLite
             return AssertNextTokenTypeAndConsume(JsonParser.TokenType.PropertyName).stringValue;
         }
 
-        internal string GetNextPropertyValue()
+        internal string GetNextStringValue()
         {
-            return AssertNextTokenTypeAndConsume(JsonParser.TokenType.PropertyValueString).stringValue;
+            return AssertNextTokenTypeAndConsume(JsonParser.TokenType.StringValue).stringValue;
         }
 
         internal bool CheckNextTokenTypeAndConsumeIfTrue(TokenType type)
@@ -104,7 +104,7 @@ namespace NPetrovichLite
             case '"':
                 bool isPropertyName;
                 string value = СontinueReadQuotedString(out isPropertyName);
-                return new Token() { tokenType = isPropertyName ? TokenType.PropertyName : TokenType.PropertyValueString, stringValue = value };
+                return new Token() { tokenType = isPropertyName ? TokenType.PropertyName : TokenType.StringValue, stringValue = value };
             case ',':
                 if (afterComma)
                 {
@@ -214,7 +214,7 @@ namespace NPetrovichLite
             ++m_bufferPos;
             if (followingChar == 'u')
             {
-                throw new ApplicationException("No support for unicode escaping yet");
+                throw new NotImplementedException("No support for unicode escaping yet");
             }
             return followingChar;
         }

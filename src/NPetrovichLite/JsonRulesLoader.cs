@@ -45,9 +45,17 @@ namespace NPetrovichLite
         private void ParseRuleSet()
         {
             string rulePartName = m_parser.GetNextPropertyName();
-            NamePart rulePart = ParseNamePart(rulePartName);
-            PartRules rules = ParsePartRulesList();
-            m_data[rulePart] = rules;
+
+            if (rulePartName == "gender")
+            {
+                ParseGenderRulesContainer();
+            }
+            else
+            {
+                NamePart rulePart = ParseNamePart(rulePartName);
+                PartRules rules = ParsePartRulesList();
+                m_data[rulePart] = rules;
+            }
         }
 
         private PartRules ParsePartRulesList()
@@ -94,7 +102,7 @@ namespace NPetrovichLite
                 switch (propertyName)
                 {
                 case "gender":
-                    gender = ParseGender(m_parser.GetNextPropertyValue());
+                    gender = ParseGender(m_parser.GetNextStringValue());
                     break;
                 case "test":
                     test = ParseTestStrings();
@@ -136,7 +144,7 @@ namespace NPetrovichLite
             m_parser.AssertNextTokenTypeAndConsume(JsonParser.TokenType.ArrayStart);
             while (!m_parser.CheckNextTokenTypeAndConsumeIfTrue(JsonParser.TokenType.ArrayEnd))
             {
-                tags |= ParseTagsValue(m_parser.GetNextPropertyValue());
+                tags |= ParseTagsValue(m_parser.GetNextStringValue());
             }
             return tags;
         }
@@ -148,7 +156,7 @@ namespace NPetrovichLite
             m_parser.AssertNextTokenTypeAndConsume(JsonParser.TokenType.ArrayStart);
             for (int i = 0; i < MODIFIERS_COUNT; ++i)
             {
-                result[i] = ParseModifier(m_parser.GetNextPropertyValue());
+                result[i] = ParseModifier(m_parser.GetNextStringValue());
             }
             m_parser.AssertNextTokenTypeAndConsume(JsonParser.TokenType.ArrayEnd);
             return result;
@@ -170,10 +178,48 @@ namespace NPetrovichLite
             m_parser.AssertNextTokenTypeAndConsume(JsonParser.TokenType.ArrayStart);
             while (!m_parser.CheckNextTokenTypeAndConsumeIfTrue(JsonParser.TokenType.ArrayEnd))
             {
-                result.Add(m_parser.GetNextPropertyValue());
+                result.Add(m_parser.GetNextStringValue());
             }
 
             return result.ToArray();
+        }
+
+        private void ParseGenderRulesContainer()
+        {
+            m_parser.AssertNextTokenTypeAndConsume(JsonParser.TokenType.ObjectStart);
+            while (!m_parser.CheckNextTokenTypeAndConsumeIfTrue(JsonParser.TokenType.ObjectEnd))
+            {
+                string rulePartName = m_parser.GetNextPropertyName();
+                NamePart rulePart = ParseNamePart(rulePartName);
+                GenderRules rules = ParseGenderRules();
+                m_data.genderRules[rulePart] = rules;
+            }
+        }
+
+        private GenderRules ParseGenderRules()
+        {
+            GenderRules result = new GenderRules();
+            m_parser.AssertNextTokenTypeAndConsume(JsonParser.TokenType.ObjectStart);
+            while (!m_parser.CheckNextTokenTypeAndConsumeIfTrue(JsonParser.TokenType.ObjectEnd))
+            {
+                string genderStr = m_parser.GetNextPropertyName();
+                Gender gender = ParseGender(genderStr);
+                m_parser.AssertNextTokenTypeAndConsume(JsonParser.TokenType.ArrayStart);
+                while (!m_parser.CheckNextTokenTypeAndConsumeIfTrue(JsonParser.TokenType.ArrayEnd))
+                {
+                    string suffix = m_parser.GetNextStringValue();
+                    if (result.ContainsKey(suffix))
+                    {
+                        //TODO: warn?
+                        Console.WriteLine(suffix);
+                    }
+                    else
+                    {
+                        result.Add(suffix, gender);
+                    }
+                }
+            }
+            return result;
         }
 
         private static Tags ParseTagsValue(string value)

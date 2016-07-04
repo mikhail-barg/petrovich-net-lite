@@ -15,6 +15,8 @@ namespace NPetrovichLite
             get { return m_partRules[(int)part]; }
             set { m_partRules[(int)part] = value; }
         }
+
+        internal readonly GenderRulesContainer genderRules = new GenderRulesContainer();
     }
 
     internal sealed class PartRules : List<IRule>
@@ -156,5 +158,21 @@ namespace NPetrovichLite
         {
             return nameChunk.Substring(0, nameChunk.Length - m_trimEndChars) + m_addSuffix;
         }
+    }
+
+    internal sealed class GenderRulesContainer
+    {
+        private readonly GenderRules[] m_rulesByNamePart = new GenderRules[Enum.GetValues(typeof(NamePart)).Length];
+
+        internal GenderRules this[NamePart part]
+        {
+            get { return m_rulesByNamePart[(int)part]; }
+            set { m_rulesByNamePart[(int)part] = value; }
+        }
+    }
+
+    internal sealed class GenderRules : Dictionary<string, Gender>
+    {
+        
     }
 }
