@@ -195,7 +195,7 @@ namespace NPetrovichLite
             }
         }
 
-        private ParseGenderRules(GenderRules rules)
+        private void ParseGenderRules(GenderRules rules)
         {
             m_parser.AssertNextTokenTypeAndConsume(JsonParser.TokenType.ObjectStart);
             while (!m_parser.CheckNextTokenTypeAndConsumeIfTrue(JsonParser.TokenType.ObjectEnd))
