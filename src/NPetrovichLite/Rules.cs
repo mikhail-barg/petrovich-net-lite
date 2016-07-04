@@ -32,6 +32,10 @@ namespace NPetrovichLite
 
     internal abstract class BaseRule : IRule
     {
+#if STORE_SOURCE_LINE_IN_RULES
+        public int startLineIndex;
+#endif
+
         private readonly Gender m_gender;
         private readonly Tags m_tags;
         private readonly IModifier[] m_modifiers;

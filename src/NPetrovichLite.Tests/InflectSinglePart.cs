@@ -12,9 +12,11 @@ namespace NPetrovichLite.Tests
     {
         private Petrovich petrovich;
 
+        [SetUp]
         [OneTimeSetUp]
         public void Init()
         {
+            //petrovich = new Petrovich(@"c:\Dev\_Projects\petrovich-net\src\rules\rules.json");
             petrovich = new Petrovich();
         }
 
@@ -30,7 +32,7 @@ namespace NPetrovichLite.Tests
         }
 
         [Test]
-        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.LastNamesData))]
+        [TestCaseSource(typeof(TestDataFactory), "LastNamesData"/*nameof(TestDataFactory.LastNamesData)*/)]
         public void LastNames(string value, NamePart part, Gender gender, Case targetCase, string expected)
         {
             string result = petrovich.InflectNamePart(value, part, gender, targetCase);

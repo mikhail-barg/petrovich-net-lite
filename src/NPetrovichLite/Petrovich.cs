@@ -17,11 +17,16 @@ namespace NPetrovichLite
             m_rules = JsonRulesLoader.LoadEmbeddedResource();
         }
 
+        public Petrovich(string rulesFileName)
+        {
+            m_rules = JsonRulesLoader.LoadFromFile(rulesFileName);
+        }
+
         public string InflectNamePart(string namePartValue, NamePart namePart, Gender gender, Case targetCase)
         {
             if (namePartValue == null)
             {
-                throw new ArgumentNullException(nameof(namePartValue));
+                throw new ArgumentNullException(/*nameof(namePartValue)*/ "namePartValue");
             }
             /*
             if (string.IsNullOrWhiteSpace(namePartValue))

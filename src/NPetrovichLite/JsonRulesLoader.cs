@@ -27,6 +27,15 @@ namespace NPetrovichLite
             }
         }
 
+        internal static RulesContainer LoadFromFile(string rulesFileName)
+        {
+            using (StreamReader reader = new StreamReader(rulesFileName))
+            {
+                JsonRulesLoader loader = new JsonRulesLoader(reader);
+                return loader.m_data;
+            }
+        }
+
         private readonly RulesContainer m_data = new RulesContainer();
 
         private readonly JsonParser m_parser;
@@ -95,7 +104,7 @@ namespace NPetrovichLite
             IModifier[] modifiers = null;
             Tags tags = Tags.None;
 
-            m_parser.AssertNextTokenTypeAndConsume(JsonParser.TokenType.ObjectStart);
+            JsonParser.Token startRuleToken = m_parser.AssertNextTokenTypeAndConsume(JsonParser.TokenType.ObjectStart);
             while (!m_parser.CheckNextTokenTypeAndConsumeIfTrue(JsonParser.TokenType.ObjectEnd))
             {
                 string propertyName = m_parser.GetNextPropertyName();
@@ -127,15 +136,20 @@ namespace NPetrovichLite
             {
                 throw new ParseException("Failed to parse rule, no modifiers specified");
             }
-            
+
+            BaseRule rule;
             if (ruleGroupIsSuffix)
             {
-                return new SufixRule(gender.Value, tags, test, modifiers);
+                rule = new SufixRule(gender.Value, tags, test, modifiers);
             }
             else
             {
-                return new ExceptionRule(gender.Value, tags, test, modifiers);
+                rule = new ExceptionRule(gender.Value, tags, test, modifiers);
             }
+#if STORE_SOURCE_LINE_IN_RULES
+            rule.startLineIndex = startRuleToken.sourceLine;
+#endif
+            return rule;
         }
 
         private Tags ParseTags()

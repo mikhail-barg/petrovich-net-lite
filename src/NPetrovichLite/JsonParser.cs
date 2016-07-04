@@ -25,6 +25,7 @@ namespace NPetrovichLite
         {
             internal TokenType tokenType;
             internal string stringValue;
+            internal int sourceLine;
         }
 
         private readonly StreamReader m_reader;
@@ -89,22 +90,26 @@ namespace NPetrovichLite
             char startingChar;
             if (!GetNextValuableChar(out startingChar))
             {
-                return new Token() { tokenType = TokenType.EOF };
+                return new Token() { tokenType = TokenType.EOF, sourceLine = lineIndex };
             }
             switch (startingChar)
             {
             case '{':
-                return new Token() { tokenType = TokenType.ObjectStart };
+                return new Token() { tokenType = TokenType.ObjectStart, sourceLine = lineIndex };
             case '}':
-                return new Token() { tokenType = TokenType.ObjectEnd };
+                return new Token() { tokenType = TokenType.ObjectEnd, sourceLine = lineIndex };
             case '[':
-                return new Token() { tokenType = TokenType.ArrayStart };
+                return new Token() { tokenType = TokenType.ArrayStart, sourceLine = lineIndex };
             case ']':
-                return new Token() { tokenType = TokenType.ArrayEnd };
+                return new Token() { tokenType = TokenType.ArrayEnd, sourceLine = lineIndex };
             case '"':
                 bool isPropertyName;
                 string value = СontinueReadQuotedString(out isPropertyName);
-                return new Token() { tokenType = isPropertyName ? TokenType.PropertyName : TokenType.StringValue, stringValue = value };
+                return new Token() {
+                    tokenType = isPropertyName ? TokenType.PropertyName : TokenType.StringValue,
+                    stringValue = value,
+                    sourceLine = lineIndex
+                };
             case ',':
                 if (afterComma)
                 {
@@ -119,6 +124,7 @@ namespace NPetrovichLite
         private readonly char[] m_buffer = new char[2048];
         private int m_bufferLength = 0;
         private int m_bufferPos = 0;
+        private int lineIndex = 1;
 
         private bool AssureNextCharExists()
         {
@@ -142,6 +148,10 @@ namespace NPetrovichLite
                 if (!Char.IsWhiteSpace(m_buffer[m_bufferPos]))
                 {
                     break;
+                }
+                if (m_buffer[m_bufferPos] == (char)10)
+                {
+                    ++lineIndex;
                 }
                 ++m_bufferPos;
             }
