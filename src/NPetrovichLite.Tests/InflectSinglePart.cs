@@ -34,8 +34,8 @@ namespace NPetrovichLite.Tests
         [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.LastNamesData))]
         [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.FirstNamesData))]
         [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.MidNamesData))]
-        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.ReadSurnamesData))]
-        public void LastNames(string value, NamePart part, Gender gender, Case targetCase, string expected)
+        //[TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.ReadSurnamesData))]
+        public void TestSinglePartInflection(string value, NamePart part, Gender gender, Case targetCase, string expected)
         {
             string result = petrovich.InflectNamePart(value, part, gender, targetCase);
             Assert.AreEqual(expected, result, string.Format("Part: {0}, Gender: {1}, Case: {2}", part, gender, targetCase));

@@ -22,7 +22,7 @@ namespace NPetrovichLite.Tests.App
 
             InflectSinglePart testFixture = new InflectSinglePart();
             testFixture.Init();
-            MethodInfo mi = testFixture.GetType().GetMethod(nameof(InflectSinglePart.LastNames));
+            MethodInfo mi = testFixture.GetType().GetMethod(nameof(InflectSinglePart.TestSinglePartInflection));
             foreach (object[] par in TestDataFactory.ReadSurnamesData())
             {
                 mi.Invoke(testFixture, par);

@@ -1,0 +1,9 @@
+﻿GENDER,			PART,		VALUE
+Male, 			FirstName,	Александр
+Male, 			LastName, 	Склифасовский
+Female, 		FirstName,	Александра
+Female, 		LastName, 	Склифасовская
+Androgynous,	LastName, 	Осипчук
+Male, 			MiddleName,	Олегович
+Female, 		MiddleName,	Олеговна
+Androgynous,	FirstName,	Саша

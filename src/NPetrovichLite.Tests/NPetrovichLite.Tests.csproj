@@ -93,12 +93,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GenderDetection.cs" />
     <Compile Include="InflectSinglePart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestDataFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\FirstNames.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\GendersMultiple.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\GendersSingle.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Data\LastNames.csv">

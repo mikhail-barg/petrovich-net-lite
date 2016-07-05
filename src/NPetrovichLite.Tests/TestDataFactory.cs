@@ -102,5 +102,50 @@ namespace NPetrovichLite.Tests
                 throw new ApplicationException("Bad value: '" + value + "'");
             }
         }
+
+        public static IEnumerable ReadGendersSingleData()
+        {
+            using (StreamReader reader = new StreamReader(Path.Combine(NUnit.Framework.TestContext.CurrentContext.TestDirectory, "Data", "GendersSingle.csv")))
+            {
+                string line;
+                line = reader.ReadLine();  //skip header
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (string.IsNullOrWhiteSpace(line))
+                    {
+                        continue;
+                    }
+
+                    string[] chunks = line.Split(',').Select(s => s.Trim()).ToArray();
+                    Gender gender = (Gender)Enum.Parse(typeof(Gender), chunks[0]);
+                    NamePart namePart = (NamePart)Enum.Parse(typeof(NamePart), chunks[1]);
+
+                    yield return new object[] { namePart, chunks[2], gender };
+                }
+            }
+        }
+
+        public static IEnumerable ReadGendersMultipleData()
+        {
+            using (StreamReader reader = new StreamReader(Path.Combine(NUnit.Framework.TestContext.CurrentContext.TestDirectory, "Data", "GendersMultiple.csv")))
+            {
+                string line;
+                line = reader.ReadLine();  //skip header
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (string.IsNullOrWhiteSpace(line))
+                    {
+                        continue;
+                    }
+
+                    string[] chunks = line.Split(',')
+                        .Select(s => String.IsNullOrWhiteSpace(s)? null : s.Trim())
+                        .ToArray();
+                    Gender gender = (Gender)Enum.Parse(typeof(Gender), chunks[0]);
+
+                    yield return new object[] { chunks[1], chunks[2], chunks[3], gender };
+                }
+            }
+        }
     }
 }

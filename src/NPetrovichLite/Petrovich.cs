@@ -38,7 +38,7 @@ namespace NPetrovichLite
             return String.Join("-", chunks);
         }
 
-        public Gender? TryGetGender(string namePartValue, NamePart namePart)
+        public Gender GetGender(string namePartValue, NamePart namePart)
         {
             if (namePartValue == null)
             {
@@ -52,9 +52,47 @@ namespace NPetrovichLite
                     return pair.Value;
                 }
             }
-            return null;
+            return Gender.Androgynous;
         }
 
+        public Gender GetGender(string lastName = null, string firstName = null, string midName = null)
+        {
+            if (lastName == null && firstName == null && midName == null)
+            {
+                throw new ArgumentNullException("All arguments are null");
+            }
 
+            if (midName != null)
+            {
+                Gender gender = GetGender(midName, NamePart.MiddleName);
+                if (gender != Gender.Androgynous)
+                {
+                    //Return gender if middlename is specified and gender is determined.
+                    return gender;
+                }
+                //otherwise no interest in midName at all
+            }
+
+            Gender firstNameGender = firstName != null? GetGender(firstName, NamePart.FirstName) : Gender.Androgynous;
+            Gender lastNameGender = lastName != null? GetGender(lastName, NamePart.LastName) : Gender.Androgynous;
+
+            if (firstNameGender == lastNameGender)
+            {
+                return firstNameGender;
+            }
+            if (firstNameGender == Gender.Androgynous)
+            {
+                return lastNameGender;
+            }
+            if (lastNameGender == Gender.Androgynous)
+            {
+                return firstNameGender;
+            }
+            if (firstNameGender != lastNameGender)
+            {
+                //weird case should not happen probably
+            }
+            return Gender.Androgynous;
+        }
     }
 }
