@@ -38,7 +38,22 @@ namespace NPetrovichLite
             return String.Join("-", chunks);
         }
 
-        
+        public Gender? TryGetGender(string namePartValue, NamePart namePart)
+        {
+            if (namePartValue == null)
+            {
+                throw new ArgumentNullException(nameof(namePartValue));
+            }
+            GenderRules rules = m_rules.genderRules[namePart];
+            foreach (KeyValuePair<string, Gender> pair in rules)
+            {
+                if (namePartValue.EndsWith(pair.Key, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return pair.Value;
+                }
+            }
+            return null;
+        }
 
 
     }
