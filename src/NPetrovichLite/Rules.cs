@@ -21,7 +21,18 @@ namespace NPetrovichLite
 
     internal sealed class PartRules : List<IRule>
     {
-
+        internal string InflectChunk(string chunk, Gender gender, Tags tags, Case targetCase)
+        {
+            foreach (IRule rule in this)
+            {
+                if (rule.Matches(chunk, gender, tags))
+                {
+                    return rule.Inflect(chunk, targetCase);
+                }
+            }
+            //TODO: log unhandled cases
+            return chunk;
+        }
     }
 
     internal interface IRule

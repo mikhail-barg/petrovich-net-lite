@@ -226,7 +226,11 @@ namespace NPetrovichLite
             {
                 throw new NotImplementedException("No support for unicode escaping yet");
             }
-            return followingChar;
+            if (followingChar == '\\' || followingChar == '"')
+            {
+                return followingChar;
+            }
+            throw new NotImplementedException("TODO: implement proper character escaping");
         }
     }
 }
