@@ -22,12 +22,12 @@ namespace NPetrovichLite.Tests
         [Test]
         public void Test01()
         {
-            Assert.AreEqual("Иванов", petrovich.InflectNamePart("Иванов", NamePart.LastName, Gender.Male, Case.Nominative));
-            Assert.AreEqual("Иванова", petrovich.InflectNamePart("Иванов", NamePart.LastName, Gender.Male, Case.Genitive));
-            Assert.AreEqual("Иванову", petrovich.InflectNamePart("Иванов", NamePart.LastName, Gender.Male, Case.Dative));
-            Assert.AreEqual("Иванова", petrovich.InflectNamePart("Иванов", NamePart.LastName, Gender.Male, Case.Accusative));
-            Assert.AreEqual("Ивановым", petrovich.InflectNamePart("Иванов", NamePart.LastName, Gender.Male, Case.Instrumental));
-            Assert.AreEqual("Иванове", petrovich.InflectNamePart("Иванов", NamePart.LastName, Gender.Male, Case.Prepositional));
+            Assert.AreEqual("Иванов", petrovich.Inflect("Иванов", NamePart.LastName, Case.Nominative, Gender.Male));
+            Assert.AreEqual("Иванова", petrovich.Inflect("Иванов", NamePart.LastName, Case.Genitive, Gender.Male));
+            Assert.AreEqual("Иванову", petrovich.Inflect("Иванов", NamePart.LastName, Case.Dative, Gender.Male));
+            Assert.AreEqual("Иванова", petrovich.Inflect("Иванов", NamePart.LastName, Case.Accusative, Gender.Male));
+            Assert.AreEqual("Ивановым", petrovich.Inflect("Иванов", NamePart.LastName, Case.Instrumental, Gender.Male));
+            Assert.AreEqual("Иванове", petrovich.Inflect("Иванов", NamePart.LastName, Case.Prepositional, Gender.Male));
         }
 
         [Test]
@@ -37,7 +37,7 @@ namespace NPetrovichLite.Tests
         //[TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.ReadSurnamesData))]
         public void TestSinglePartInflection(string value, NamePart part, Gender gender, Case targetCase, string expected)
         {
-            string result = petrovich.InflectNamePart(value, part, gender, targetCase);
+            string result = petrovich.Inflect(value, part, targetCase, gender);
             Assert.AreEqual(expected, result, string.Format("Part: {0}, Gender: {1}, Case: {2}", part, gender, targetCase));
         }
 

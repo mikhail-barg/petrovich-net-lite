@@ -12,6 +12,13 @@ namespace NPetrovichLite
 
         private readonly RulesContainer m_rules;
 
+        public struct FIO
+        {
+            public string lastName;
+            public string firstName;
+            public string midName;
+        }
+
         public Petrovich()
         {
             m_rules = JsonRulesLoader.LoadEmbeddedResource();
@@ -22,20 +29,46 @@ namespace NPetrovichLite
             m_rules = JsonRulesLoader.LoadFromFile(rulesFileName);
         }
 
-        public string InflectNamePart(string namePartValue, NamePart namePart, Gender gender, Case targetCase)
+        public string Inflect(string namePartValue, NamePart namePart, Case targetCase, Gender? gender = null)
         {
             if (namePartValue == null)
             {
                 throw new ArgumentNullException(nameof(namePartValue));
             }
+            if (gender == null)
+            {
+                gender = GetGender(namePartValue, namePart);
+            }
+
             PartRules partRules = m_rules[namePart];
             string[] chunks = namePartValue.Split(NAME_CHUNK_SPLIT);
             for (int i = 0; i < chunks.Length; ++i)
             {
                 Tags tags = i == 0 ? Tags.FirstWord : Tags.None;
-                chunks[i] = partRules.InflectChunk(chunks[i], gender, tags, targetCase);
+                chunks[i] = partRules.InflectChunk(chunks[i], gender.Value, tags, targetCase);
             }
             return String.Join("-", chunks);
+        }
+
+        public FIO Inflect(FIO fio, Case targetCase, Gender? gender = null)
+        {
+            if (gender == null)
+            {
+                gender = GetGender(fio);
+            }
+            if (fio.lastName != null)
+            {
+                fio.lastName = Inflect(fio.lastName, NamePart.LastName, targetCase, gender.Value);
+            }
+            if (fio.firstName != null)
+            {
+                fio.firstName = Inflect(fio.firstName, NamePart.FirstName, targetCase, gender.Value);
+            }
+            if (fio.midName != null)
+            {
+                fio.midName = Inflect(fio.midName, NamePart.MiddleName, targetCase, gender.Value);
+            }
+            return fio;
         }
 
         public Gender GetGender(string namePartValue, NamePart namePart)
@@ -94,5 +127,12 @@ namespace NPetrovichLite
             }
             return Gender.Androgynous;
         }
+
+        public Gender GetGender(FIO fio)
+        {
+            return GetGender(fio.lastName, fio.firstName, fio.midName);
+        }
+
+
     }
 }
