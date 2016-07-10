@@ -17,6 +17,32 @@ namespace NPetrovichLite
             public string lastName;
             public string firstName;
             public string midName;
+
+            public override string ToString()
+            {
+                StringBuilder builder = new StringBuilder();
+                if (lastName != null)
+                {
+                    builder.Append(lastName);
+                }
+                if (firstName != null)
+                {
+                    if (builder.Length > 0)
+                    {
+                        builder.Append(' ');
+                    }
+                    builder.Append(firstName);
+                }
+                if (midName != null)
+                {
+                    if (builder.Length > 0)
+                    {
+                        builder.Append(' ');
+                    }
+                    builder.Append(midName);
+                }
+                return builder.ToString();
+            }
         }
 
         public Petrovich()

@@ -13,13 +13,32 @@ namespace NPetrovichLite.Tests.App
         {
             //NPetrovichLite.Tests.TestDataFactory.ReadSurnamesData().OfType<object[]>().ToList();
 
-            /*
             //Petrovich petrovich = new Petrovich(@"c:\Dev\_Projects\petrovich-net\src\rules\rules.json");
+            /*
             Petrovich petrovich = new Petrovich();
-            string result = petrovich.InflectNamePart("Маша", NamePart.FirstName, Gender.Female, Case.Instrumental);
-            Console.WriteLine(result);
+            Console.WriteLine(petrovich.Inflect("Маша", NamePart.FirstName, Case.Dative));
+            Console.WriteLine(petrovich.Inflect("Паша", NamePart.FirstName, Case.Dative));
+            Console.WriteLine(petrovich.Inflect("Саша", NamePart.FirstName, Case.Dative, Gender.Female));
             */
 
+            /*
+            Petrovich petrovich = new Petrovich();
+            Petrovich.FIO a = petrovich.Inflect(new Petrovich.FIO() { lastName = "Пушкин", firstName = "Александр", midName = "Сергеевич" }, Case.Dative);
+            Console.WriteLine(a);
+            Petrovich.FIO b = petrovich.Inflect(new Petrovich.FIO() { lastName = "Воробей" }, Case.Dative, Gender.Female);
+            Console.WriteLine(b);
+            Petrovich.FIO c = petrovich.Inflect(new Petrovich.FIO() { lastName = "Воробей", firstName = "Александр" }, Case.Dative);
+            Console.WriteLine(c);
+            */
+
+            /*
+            Petrovich petrovich = new Petrovich();
+            Console.WriteLine(petrovich.GetGender("Пушкин", NamePart.LastName));
+            Console.WriteLine(petrovich.GetGender("Пушкин", null, "Сергеевич"));
+            Console.WriteLine(petrovich.GetGender(new Petrovich.FIO() { lastName = "Воробей", firstName = "Александр" }));
+            */
+
+            /*
             InflectSinglePart testFixture = new InflectSinglePart();
             testFixture.Init();
             MethodInfo mi = testFixture.GetType().GetMethod(nameof(InflectSinglePart.TestSinglePartInflection));
@@ -27,6 +46,7 @@ namespace NPetrovichLite.Tests.App
             {
                 mi.Invoke(testFixture, par);
             }
+            */
         }
     }
 }
