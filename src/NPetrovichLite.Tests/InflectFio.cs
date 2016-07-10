@@ -41,7 +41,6 @@ namespace NPetrovichLite.Tests
         [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.LastNamesData))]
         [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.FirstNamesData))]
         [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.MidNamesData))]
-        //[TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.ReadSurnamesData))]
         public void TestMultipleBySinglePartInflection(string value, NamePart part, Gender gender, Case targetCase, string expected)
         {
             switch (part)
@@ -68,5 +67,19 @@ namespace NPetrovichLite.Tests
             
         }
 
+        [Test]
+        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.ReadCombinedData))]
+        public void TestMultipleInflection(string lastName, string firstName, string midName, Gender? gender, Case @case, string expectedLast, string expectedFirst, string expectedMid)
+        {
+            Petrovich.FIO source = new Petrovich.FIO() {
+                lastName = lastName,
+                firstName = firstName,
+                midName = midName
+            };
+            Petrovich.FIO result = petrovich.Inflect(source, @case, gender);
+            Assert.AreEqual(expectedLast, result.lastName, string.Format("Part: {0}, Gender: {1}, Case: {2}", NamePart.LastName, gender, @case));
+            Assert.AreEqual(expectedFirst, result.firstName, string.Format("Part: {0}, Gender: {1}, Case: {2}", NamePart.FirstName, gender, @case));
+            Assert.AreEqual(expectedMid, result.midName, string.Format("Part: {0}, Gender: {1}, Case: {2}", NamePart.MiddleName, gender, @case));
+        }
     }
 }

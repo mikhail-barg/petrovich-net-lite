@@ -147,5 +147,29 @@ namespace NPetrovichLite.Tests
                 }
             }
         }
+
+        public static IEnumerable ReadCombinedData()
+        {
+            using (StreamReader reader = new StreamReader(Path.Combine(NUnit.Framework.TestContext.CurrentContext.TestDirectory, "Data", "Combined.csv")))
+            {
+                string line;
+                line = reader.ReadLine();  //skip header
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (string.IsNullOrWhiteSpace(line))
+                    {
+                        continue;
+                    }
+
+                    string[] chunks = line.Split(',')
+                        .Select(s => String.IsNullOrWhiteSpace(s) ? null : s.Trim())
+                        .ToArray();
+                    Gender? gender = chunks[0] == null? null : (Gender?)Enum.Parse(typeof(Gender), chunks[0]);
+                    Case @case = (Case)Enum.Parse(typeof(Case), chunks[4]);
+
+                    yield return new object[] { chunks[1], chunks[2], chunks[3], gender, @case, chunks[5], chunks[6], chunks[7] };
+                }
+            }
+        }
     }
 }

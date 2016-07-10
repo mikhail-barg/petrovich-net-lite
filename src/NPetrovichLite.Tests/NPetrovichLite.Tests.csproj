@@ -100,6 +100,9 @@
     <Compile Include="TestDataFactory.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\Combined.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Data\FirstNames.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

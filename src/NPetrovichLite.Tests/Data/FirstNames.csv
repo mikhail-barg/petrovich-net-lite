@@ -1,11 +1,40 @@
-﻿Иван, Male, Genitive,      Ивана
-Иван, Male, Dative,        Ивану
-Иван, Male, Accusative,    Ивана
-Иван, Male, Instrumental,  Иваном
-Иван, Male, Prepositional, Иване
+﻿Иван,	Male,	Genitive,      Ивана
+Иван,	Male,	Dative,        Ивану
+Иван,	Male,	Accusative,    Ивана
+Иван,	Male,	Instrumental,  Иваном
+Иван,	Male,	Prepositional, Иване
 
-Маша, Female, Genitive,      Маши
-Маша, Female, Dative,        Маше
-Маша, Female, Accusative,    Машу
-Маша, Female, Instrumental,  Машей
-Маша, Female, Prepositional, Маше
+Маша,	Female, Genitive,      Маши
+Маша,	Female, Dative,        Маше
+Маша,	Female, Accusative,    Машу
+Маша,	Female, Instrumental,  Машей
+Маша,	Female, Prepositional, Маше
+
+Саша,		Male,   Dative,			Саше
+Анна-Мария, Female,	Dative,			Анне-Марии
+Геннадий,	Male,	Nominative,		Геннадий
+Мария,		Female,	Genitive,		Марии
+Василий,	Male,	Dative,			Василию
+Ксюша,		Female,	Accusative,		Ксюшу
+Паша,		Male,	Instrumental,	Пашой
+Елена,		Female,	Prepositional,	Елене
+
+Ринат,	Male,	Genitive,		Рината
+Ринат,	Male,	Dative,			Ринату
+Ринат,	Male,	Accusative,		Рината
+Ринат,	Male,	Instrumental,	Ринатом
+Ринат,	Male,	Prepositional,	Ринате
+
+Мария,	Female,	Genitive,		Марии
+Мария,	Female,	Dative,			Марии
+Мария,	Female,	Accusative,		Марию
+Мария,	Female,	Instrumental,	Марией
+Мария,	Female, Prepositional,	Марии
+
+Бьянка,	Female,	Genitive,		Бьянки
+Никита,	Male,	Genitive,		Никиты
+Дима,	Male,	Genitive,		Димы
+Ольга,	Female,	Genitive,		Ольги
+
+
+
