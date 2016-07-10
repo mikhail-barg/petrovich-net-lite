@@ -41,5 +41,14 @@ namespace NPetrovichLite.Tests
             Assert.AreEqual(expected, result, string.Format("Part: {0}, Gender: {1}, Case: {2}", part, gender, targetCase));
         }
 
+        /*
+        [Test]
+        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.ReadSurnamesData))]
+        public void TestSinglePartInflectionForBigSurnamesFile(string value, NamePart part, Gender gender, Case targetCase, string expected)
+        {
+            string result = petrovich.Inflect(value, part, targetCase, gender);
+            Assert.AreEqual(expected, result, string.Format("Part: {0}, Gender: {1}, Case: {2}", part, gender, targetCase));
+        }
+        */
     }
 }
