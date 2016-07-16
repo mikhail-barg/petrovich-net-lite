@@ -66,6 +66,8 @@ namespace NPetrovichLite.Tests
                     if (chunks2[2] == "0")
                     {
                         //weird line "ВИНЧИ	ВИНЧИ	мр-жр,ед,0"
+                        //actually, '0' in 'case' column means that the test valid for all cases
+                        // but for now there's only a single such line, and it also contains unsupported 'мр-жр' so we just skip it
                         continue;
                     }
                     if (chunks2.Length > 3)
@@ -93,7 +95,7 @@ namespace NPetrovichLite.Tests
             case "дт":
                 return Case.Dative;
             case "вн":
-                return Case.Nominative;
+                return Case.Accusative;
             case "тв":
                 return Case.Instrumental;
             case "пр":
