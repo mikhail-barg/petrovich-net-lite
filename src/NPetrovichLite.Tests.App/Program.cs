@@ -47,6 +47,10 @@ namespace NPetrovichLite.Tests.App
                 mi.Invoke(testFixture, par);
             }
             */
+
+            Petrovich petrovich = new Petrovich();
+            //Console.WriteLine(petrovich.Inflect("Aгриппа", NamePart.LastName, Case.Genitive));
+            Console.WriteLine(petrovich.Inflect("Кваша", NamePart.LastName, Case.Genitive));
         }
     }
 }

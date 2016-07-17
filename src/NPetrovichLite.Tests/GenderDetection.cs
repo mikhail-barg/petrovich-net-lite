@@ -12,7 +12,6 @@ namespace NPetrovichLite.Tests
     {
         private Petrovich petrovich;
 
-        [SetUp]
         [OneTimeSetUp]
         public void Init()
         {
@@ -21,7 +20,7 @@ namespace NPetrovichLite.Tests
 
         [Test]
         [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.ReadGendersSingleData))]
-        public void TestSinglePartGender(NamePart part, string value, Gender expected)
+        public void TestSinglePartGender(string value, NamePart part, Gender expected)
         {
             Gender? gender = petrovich.GetGender(value, part);
             Assert.AreEqual(expected, gender, string.Format("Part: {0}, Value: {1}", part, value));

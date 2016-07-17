@@ -12,7 +12,6 @@ namespace NPetrovichLite.Tests
     {
         private Petrovich petrovich;
 
-        [SetUp]
         [OneTimeSetUp]
         public void Init()
         {

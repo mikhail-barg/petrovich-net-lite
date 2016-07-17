@@ -47,7 +47,12 @@ namespace NPetrovichLite.Tests
             }
         }
 
-        public static IEnumerable ReadSurnamesData()
+        #region surnames.tsv
+        private static Gender[] MALE_GENDER_LIST = new Gender[] { Gender.Male };
+        private static Gender[] FEMALE_GENDER_LIST = new Gender[] { Gender.Female };
+        private static Gender[] BOTH_GENDER_LIST = new Gender[] { Gender.Female, Gender.Male };
+
+        public static IEnumerable SurnamesDataWithGenders()
         {
             using (StreamReader reader = new StreamReader(Path.Combine(NUnit.Framework.TestContext.CurrentContext.TestDirectory, "Data", "surnames.tsv")))
             {
@@ -63,24 +68,65 @@ namespace NPetrovichLite.Tests
                     string[] chunks = line.ToLower().Split('\t').Select(s => s.Trim()).ToArray();
                     string[] chunks2 = chunks[2].Split(',');
 
-                    if (chunks2[2] == "0")
-                    {
-                        //weird line "ВИНЧИ	ВИНЧИ	мр-жр,ед,0"
-                        //actually, '0' in 'case' column means that the test valid for all cases
-                        // but for now there's only a single such line, and it also contains unsupported 'мр-жр' so we just skip it
-                        continue;
-                    }
                     if (chunks2.Length > 3)
                     {
                         //weird lines "ЦЕЛИЙ	ЦЕЛИЙ	мр,имя,ед,им"
                         continue;
                     }
 
-                    Gender gender = chunks2[0] == "жр" ? Gender.Female : Gender.Male;
-                    Case @case = Parse2LetterCase(chunks2[2]);
+                    Gender[] genders;
+                    switch (chunks2[0])
+                    {
+                    case "жр":
+                        genders = FEMALE_GENDER_LIST;
+                        break;
+                    case "мр":
+                        genders = MALE_GENDER_LIST;
+                        break;
+                    case "мр-жр":
+                        genders = BOTH_GENDER_LIST;
+                        break;
+                    default:
+                        throw new ApplicationException($"Unexpected gender string '{chunks2[0]}'");
+                    }
 
-                    yield return new object[] { chunks[0], NamePart.LastName, gender, @case, chunks[1] };
+                    if (chunks2[2] == "0")
+                    {
+                        //actually, '0' in 'case' column means that the test valid for all cases
+                        foreach (Gender gender in genders)
+                        {
+                            foreach (Case @case in Enum.GetValues(typeof(Case)))
+                            {
+                                yield return new object[] { chunks[0], NamePart.LastName, gender, @case, chunks[1] };
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Case @case = Parse2LetterCase(chunks2[2]);
+                        foreach (Gender gender in genders)
+                        {
+                            yield return new object[] { chunks[0], NamePart.LastName, gender, @case, chunks[1] };
+                        }
+                    }
                 }
+            }
+        }
+
+        public static IEnumerable SurnamesDataWithoutGenders()
+        {
+            foreach (object[] row in SurnamesDataWithGenders())
+            {
+                row[2] = null;
+                yield return row;
+            }
+        }
+
+        public static IEnumerable SurnamesDataForGenderDetection()
+        {
+            foreach (object[] row in SurnamesDataWithGenders())
+            {
+                yield return new object[] { row[0], row[1], row[2] };
             }
         }
 
@@ -104,6 +150,7 @@ namespace NPetrovichLite.Tests
                 throw new ApplicationException("Bad value: '" + value + "'");
             }
         }
+        #endregion
 
         public static IEnumerable ReadGendersSingleData()
         {
@@ -122,7 +169,7 @@ namespace NPetrovichLite.Tests
                     Gender gender = (Gender)Enum.Parse(typeof(Gender), chunks[0]);
                     NamePart namePart = (NamePart)Enum.Parse(typeof(NamePart), chunks[1]);
 
-                    yield return new object[] { namePart, chunks[2], gender };
+                    yield return new object[] { chunks[2], namePart, gender };
                 }
             }
         }
