@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 namespace NPetrovichLite.Tests
 {
-    //[TestFixture(Category = "surnames.tsv")]
+    [TestFixture(Category = "surnames.tsv")]
     //Tests for huge surnames.tsv
     public sealed class SurnamesTests
     {
@@ -28,7 +28,7 @@ namespace NPetrovichLite.Tests
             string result = petrovich.Inflect(value, part, targetCase, gender);
             Assert.AreEqual(expected, result, $"Value: {value}, Part: {part}, Gender: {gender}");
         }
-        */
+
         [Test]
         [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.SurnamesDataForGenderDetection))]
         public void TestGenderDetection(string value, NamePart part, Gender expected)
@@ -36,5 +36,6 @@ namespace NPetrovichLite.Tests
             Gender gender = petrovich.GetGender(value, part);
             Assert.AreEqual(expected, gender, $"Value: {value} Part: {part}");
         }
+        */
     }
 }
