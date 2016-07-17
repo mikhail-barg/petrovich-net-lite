@@ -1,6 +1,6 @@
 # petrovich-net-lite
 Легковесный C#-порт проекта [Petrovich](https://github.com/petrovich) - склонение русских фамилий, имен и отчеств.
-См. также [оффициальный C#-порт (NPetrovich)](https://github.com/petrovich/petrovich-net)
+См. также [официальный C#-порт (NPetrovich)](https://github.com/petrovich/petrovich-net)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/0pep5lf0o67wnb1r?svg=true)](https://ci.appveyor.com/project/mikhail-barg/petrovich-net-lite)
 
