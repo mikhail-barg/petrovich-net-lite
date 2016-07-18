@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPetrovichLite.Tests", "NPe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPetrovichLite.Tests.App", "NPetrovichLite.Tests.App\NPetrovichLite.Tests.App.csproj", "{99A0605E-AA0F-4757-B4E9-856389A0FD95}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenCorporaParser", "OpenCorporaParser\OpenCorporaParser.csproj", "{C78A8705-21C8-485D-97A3-D5844F606CF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{99A0605E-AA0F-4757-B4E9-856389A0FD95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99A0605E-AA0F-4757-B4E9-856389A0FD95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99A0605E-AA0F-4757-B4E9-856389A0FD95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C78A8705-21C8-485D-97A3-D5844F606CF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C78A8705-21C8-485D-97A3-D5844F606CF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C78A8705-21C8-485D-97A3-D5844F606CF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C78A8705-21C8-485D-97A3-D5844F606CF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
