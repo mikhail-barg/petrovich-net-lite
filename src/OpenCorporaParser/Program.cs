@@ -74,7 +74,7 @@ namespace OpenCorporaParser
 
             OrderedDictionary lemmaToGender = new OrderedDictionary();
             Console.WriteLine("writing to file");
-            using (StreamWriter writerFull = new StreamWriter($"{namePart}.oc.tsv", false, new UTF8Encoding(false)))
+            using (StreamWriter writerFull = new StreamWriter($"{namePart}.tsv", false, new UTF8Encoding(false)))
             {
                 writerFull.NewLine = "\n";
                 writerFull.WriteLine("lemma\tword\tgrammemes");
@@ -204,7 +204,7 @@ namespace OpenCorporaParser
                 }
             }
 
-            using (StreamWriter writerGender = new StreamWriter($"{namePart}.oc.gender.tsv", false, new UTF8Encoding(false)))
+            using (StreamWriter writerGender = new StreamWriter($"{namePart}.gender.tsv", false, new UTF8Encoding(false)))
             {
                 writerGender.NewLine = "\n";
                 writerGender.WriteLine("lemma\tgender");

@@ -97,7 +97,7 @@
     <Compile Include="InflectFio.cs" />
     <Compile Include="InflectSinglePart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SurnamesTests.cs" />
+    <Compile Include="OpencorporaTests.cs" />
     <Compile Include="TestDataFactory.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -128,6 +128,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Data\firstnames.gender.tsv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\firstnames.tsv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\surnames.gender.tsv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Data\surnames.tsv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

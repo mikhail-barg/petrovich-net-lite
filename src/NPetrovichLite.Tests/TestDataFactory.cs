@@ -48,14 +48,13 @@ namespace NPetrovichLite.Tests
             }
         }
 
-        #region surnames.tsv
+        #region opencorpora files
         private static Gender[] MALE_GENDER_LIST = new Gender[] { Gender.Male };
         private static Gender[] FEMALE_GENDER_LIST = new Gender[] { Gender.Female };
         private static Gender[] BOTH_GENDER_LIST = new Gender[] { Gender.Female, Gender.Male };
-
-        public static IEnumerable SurnamesDataWithGenders()
+        public static IEnumerable OpencorporaInflectionData(string fileName, NamePart namePart)
         {
-            using (StreamReader reader = new StreamReader(Path.Combine(NUnit.Framework.TestContext.CurrentContext.TestDirectory, "Data", "surnames.tsv")))
+            using (StreamReader reader = new StreamReader(Path.Combine(NUnit.Framework.TestContext.CurrentContext.TestDirectory, "Data", fileName)))
             {
                 string line;
                 line = reader.ReadLine();  //skip header
@@ -86,7 +85,7 @@ namespace NPetrovichLite.Tests
                         break;
                     case "мр-жр":
                         genders = BOTH_GENDER_LIST;
-                        break;
+                        break;                    
                     default:
                         throw new ApplicationException($"Unexpected gender string '{chunks2[0]}'");
                     }
@@ -98,7 +97,7 @@ namespace NPetrovichLite.Tests
                         {
                             foreach (Case @case in Enum.GetValues(typeof(Case)))
                             {
-                                yield return new object[] { chunks[0], NamePart.LastName, gender, @case, chunks[1] };
+                                yield return new object[] { chunks[0], namePart, gender, @case, chunks[1] };
                             }
                         }
                     }
@@ -107,27 +106,46 @@ namespace NPetrovichLite.Tests
                         Case @case = Parse2LetterCase(chunks2[2]);
                         foreach (Gender gender in genders)
                         {
-                            yield return new object[] { chunks[0], NamePart.LastName, gender, @case, chunks[1] };
+                            yield return new object[] { chunks[0], namePart, gender, @case, chunks[1] };
                         }
                     }
                 }
             }
         }
 
-        public static IEnumerable SurnamesDataWithoutGenders()
+        public static IEnumerable OpencorporaGenderDetectionData(string fileName, NamePart namePart)
         {
-            foreach (object[] row in SurnamesDataWithGenders())
+            using (StreamReader reader = new StreamReader(Path.Combine(NUnit.Framework.TestContext.CurrentContext.TestDirectory, "Data", fileName)))
             {
-                row[2] = null;
-                yield return row;
-            }
-        }
+                string line;
+                line = reader.ReadLine();  //skip header
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (string.IsNullOrWhiteSpace(line))
+                    {
+                        continue;
+                    }
 
-        public static IEnumerable SurnamesDataForGenderDetection()
-        {
-            foreach (object[] row in SurnamesDataWithGenders())
-            {
-                yield return new object[] { row[0], row[1], row[2] };
+                    string[] chunks = line.ToLower().Split('\t').Select(s => s.Trim()).ToArray();
+
+                    Gender gender;
+                    switch (chunks[1])
+                    {
+                    case "жр":
+                        gender = Gender.Female;
+                        break;
+                    case "мр":
+                        gender = Gender.Male;
+                        break;
+                    case "мр-жр":
+                        gender = Gender.Androgynous;
+                        break;
+                    default:
+                        throw new ApplicationException($"Unexpected gender string '{chunks[1]}'");
+                    }
+
+                    yield return new object[] { chunks[0], namePart, gender};
+                }
             }
         }
 
