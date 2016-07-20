@@ -10,37 +10,45 @@ namespace NPetrovichLite
 {
     internal class JsonRulesLoader
     {
-        private const string RESOURCE_NAME = "NPetrovichLite.rules.json";
-        private static readonly int MODIFIERS_COUNT = Enum.GetValues(typeof(Case)).Length - 1;
+        private const string RULES_RESOURCE_NAME = "NPetrovichLite.rules.json";
+        private const string GENDER_RESOURCE_NAME = "NPetrovichLite.gender.json";
+        private static readonly int MODIFIERS_COUNT = Enum.GetValues(typeof(Case)).Length - 1;  //Nominal case is not listed in the rules, therefore -1
 
-        internal static RulesContainer LoadEmbeddedResource()
+        internal static RulesContainer LoadEmbeddedResources()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
 
-            using (Stream stream = assembly.GetManifestResourceStream(RESOURCE_NAME))
+            JsonRulesLoader loader = new JsonRulesLoader();
+            using (StreamReader reader = new StreamReader(assembly.GetManifestResourceStream(RULES_RESOURCE_NAME)))
             {
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    JsonRulesLoader loader = new JsonRulesLoader(reader);
-                    return loader.m_data;
-                }
+                loader.Load(reader);
             }
+            using (StreamReader reader = new StreamReader(assembly.GetManifestResourceStream(GENDER_RESOURCE_NAME)))
+            {
+                loader.Load(reader);
+            }
+            return loader.m_data;
         }
 
-        internal static RulesContainer LoadFromFile(string rulesFileName)
+        internal static RulesContainer LoadFromFile(string rulesFileName, string genderFileName)
         {
+            JsonRulesLoader loader = new JsonRulesLoader();
             using (StreamReader reader = new StreamReader(rulesFileName))
             {
-                JsonRulesLoader loader = new JsonRulesLoader(reader);
-                return loader.m_data;
+                loader.Load(reader);
             }
+            using (StreamReader reader = new StreamReader(genderFileName))
+            {
+                loader.Load(reader);
+            }
+            return loader.m_data;
         }
 
         private readonly RulesContainer m_data = new RulesContainer();
 
-        private readonly JsonParser m_parser;
+        private JsonParser m_parser;
 
-        private JsonRulesLoader(StreamReader reader)
+        private void Load(StreamReader reader)
         {
             m_parser = new JsonParser(reader);
 
@@ -49,6 +57,8 @@ namespace NPetrovichLite
             {
                 ParseRuleSet();
             }
+
+            m_parser = null;
         }
 
         private void ParseRuleSet()
