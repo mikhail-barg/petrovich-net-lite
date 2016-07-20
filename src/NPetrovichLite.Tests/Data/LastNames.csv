@@ -1,4 +1,5 @@
-﻿Иванов, Male, Genitive,      Иванова
+﻿LAST_NAME,	GENDER,	CASE,	EXPECTED_LAST
+Иванов, Male, Genitive,      Иванова
 Иванов, Male, Dative,        Иванову
 Иванов, Male, Accusative,    Иванова
 Иванов, Male, Instrumental,  Ивановым
@@ -64,3 +65,6 @@
 
 Левобережный,	Male,	Genitive,	Левобережного
 Маковецкая,		Female,	Genitive,	Маковецкой
+
+Слуцкая,		Female,	Dative,		Слуцкой
+Штеттер,		Male,	Dative,		Штеттеру

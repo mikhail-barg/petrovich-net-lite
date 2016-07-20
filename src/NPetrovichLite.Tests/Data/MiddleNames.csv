@@ -1,4 +1,5 @@
-﻿Иванович, Male, Genitive,      Ивановича
+﻿MID_NAME,	GENDER,		CASE,	EXPECTED_MID
+Иванович, Male, Genitive,      Ивановича
 Иванович, Male, Dative,        Ивановичу
 Иванович, Male, Accusative,    Ивановича
 Иванович, Male, Instrumental,  Ивановичем

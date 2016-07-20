@@ -30,6 +30,7 @@ namespace NPetrovichLite.Tests
             using (StreamReader reader = new StreamReader(Path.Combine(NUnit.Framework.TestContext.CurrentContext.TestDirectory, "Data", fileName)))
             {
                 string line;
+                line = reader.ReadLine();  //skip header
                 while ((line = reader.ReadLine()) != null)
                 {
                     if (string.IsNullOrWhiteSpace(line))
