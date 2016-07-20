@@ -180,6 +180,15 @@ namespace OpenCorporaParser
                         ))
                     {
                         string form = childNode.Attributes["t"].Value.ToUpper();
+                        switch (form)   //fix mistakes i dict.opencorpora (see https://github.com/petrovich/petrovich-eval/pull/2/commits/4c33042ae0aa46bfbe4e5e46a289e3137aaa9549)
+                        {
+                        case "ЖУРАВЛВЁОЙ":
+                            form = "ЖУРАВЛЁВОЙ";
+                            break;
+                        case "КОВАЁВУ":
+                            form = "КОВАЛЁВУ";
+                            break;
+                        }
                         string @case = ConvertCase(childNode, lemma);
                         if (@case == null)
                         {
