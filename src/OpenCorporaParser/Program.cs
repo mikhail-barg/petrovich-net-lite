@@ -133,7 +133,7 @@ namespace OpenCorporaParser
                         case "Fixd":
                             //isFixed = true; //for fixed 
                             break;
-                        case "inan":    //strangely happens sometimes, eg. "РОЖЕ"
+                        case "inan":    //strangely happens sometimes, eg. "РОЖЕ", "РОЖЕВИЧ", "РОЖЕВНА"
                             break;
                         default:
                             Console.WriteLine(gr);
@@ -144,63 +144,38 @@ namespace OpenCorporaParser
                     {
                         throw new ApplicationException($"No gender detected for '{lemma}'");
                     }
-                    if (lemmaToGender.Contains(lemma))
-                    {
-                        //already had an item with same lemma, so it must be another gender
-                        if ((string)lemmaToGender[lemma] == gender)
-                        {
-                            //for some reason happens with "АБДАЛОВИЧ"
-                            //throw new ApplicationException($"Duplicate lemma {lemma} with same gender {gender}");
-                        }
-                        else
-                        {
-                            lemmaToGender[lemma] = "мр-жр";
-                        }
-                    }
-                    else
-                    {
-                        lemmaToGender[lemma] = gender;
-                    }
 
-                    /*
-                    if (isFixed)
+                    XmlNodeList weirdVieMidname = lemmaNode.SelectNodes(GetProperFnodesXpathQuery(@"g[@v=""V-ie""] and g[@v=""nomn""]"));
+                    if (weirdVieMidname.Count == 0)
                     {
-                        writerFull.WriteLine($"{lemma}\t{lemma}\t{gender},ед,0");
+                        //normal case
+                        ProcessWriteLemma(lemma, gender, lemmaToGender, lemmaNode, null, writerFull);
                     }
                     else
                     {
-                    */
-                    foreach (XmlNode childNode in lemmaNode.SelectNodes(
-                        @"f[
-                                g[@v=""sing""] 
-                                and not(g[@v=""V-ey""]) and not(g[@v=""V-oy""])
-                                and not(g[@v=""Dist""]) and not(g[@v=""Erro""])
-                                and not(g[@v=""voct""]) and not(g[@v=""gen1""]) and not(g[@v=""gen2""]) and not(g[@v=""acc2""]) and not(g[@v=""loc1""]) and not(g[@v=""loc2""])
-                        ]"
-                        ))
-                    {
-                        string form = childNode.Attributes["t"].Value.ToUpper();
-                        switch (form)   //fix mistakes i dict.opencorpora (see https://github.com/petrovich/petrovich-eval/pull/2/commits/4c33042ae0aa46bfbe4e5e46a289e3137aaa9549)
-                        {
-                        case "ЖУРАВЛВЁОЙ":
-                            form = "ЖУРАВЛЁВОЙ";
-                            break;
-                        case "КОВАЁВУ":
-                            form = "КОВАЛЁВУ";
-                            break;
-                        }
-                        string @case = ConvertCase(childNode, lemma);
-                        if (@case == null)
-                        {
-                            continue;   //unsupported weird case
-                        }
-                        if (childNode.ChildNodes.Count != 2)
-                        {
-                            throw new ApplicationException($"some strange info for lemma {lemma} in form {form}");
-                        }
-                        writerFull.WriteLine($"{lemma}\t{form}\t{gender},ед,{@case}");
+                        //weird "отчество через -ие-" mixture
+                        //<lemma id="471" rev="471">
+                        //<l t="абдрефиевич">
+                        //    <g v="NOUN"/>
+                        //    <g v="anim"/>
+                        //    <g v="masc"/>
+                        //    <g v="Patr"/>
+                        //</l><f t="абдрефиевич">
+                        //    <g v="sing"/>
+                        //    <g v="nomn"/>
+                        //    <g v="V-ie"/>
+                        //</f><f t="абдрефьевич">
+                        //    <g v="sing"/>
+                        //    <g v="nomn"/>
+                        //
+                        // we need to read actual lemmas from <f>
+                        lemma = weirdVieMidname[0].Attributes["t"].Value.ToUpper();
+                        ProcessWriteLemma(lemma, gender, lemmaToGender, lemmaNode, @"g[@v=""V-ie""]", writerFull);
+
+                        XmlNodeList normalMidname = lemmaNode.SelectNodes(GetProperFnodesXpathQuery(@"not(g[@v=""V-ie""]) and g[@v=""nomn""]"));
+                        lemma = normalMidname[0].Attributes["t"].Value.ToUpper();
+                        ProcessWriteLemma(lemma, gender, lemmaToGender, lemmaNode, @"not(g[@v=""V-ie""])", writerFull);
                     }
-                    //}
                 }
             }
 
@@ -212,6 +187,82 @@ namespace OpenCorporaParser
                 {
                     writerGender.WriteLine($"{entry.Key}\t{entry.Value}");
                 }
+            }
+        }
+
+        private static string GetProperFnodesXpathQuery(string additionalXpathFilter)
+        {
+            if (additionalXpathFilter != null)
+            {
+                additionalXpathFilter = " and " + additionalXpathFilter;
+            }
+            return $@"f[
+                        g[@v=""sing""] 
+                        and not(g[@v=""V-ey""]) and not(g[@v=""V-oy""])
+                        and not(g[@v=""Dist""]) and not(g[@v=""Erro""]) and not(g[@v=""Infr""])
+                        and not(g[@v=""voct""]) and not(g[@v=""gen1""]) and not(g[@v=""gen2""]) and not(g[@v=""acc2""]) and not(g[@v=""loc1""]) and not(g[@v=""loc2""])
+                        {additionalXpathFilter}
+                    ]";
+        }
+
+        private static void ProcessWriteLemma(string lemma, string gender, OrderedDictionary lemmaToGender, XmlNode lemmaNode, string additionalXpathFilter, StreamWriter writerFull)
+        {
+            if (lemmaToGender.Contains(lemma))
+            {
+                //already had an item with same lemma, so it must be another gender
+                if ((string)lemmaToGender[lemma] == gender)
+                {
+                    //for some reason happens with "АБДАЛОВИЧ"
+                    //throw new ApplicationException($"Duplicate lemma {lemma} with same gender {gender}");
+                }
+                else
+                {
+                    lemmaToGender[lemma] = "мр-жр";
+                }
+            }
+            else
+            {
+                lemmaToGender[lemma] = gender;
+            }
+
+            /*
+            if (isFixed)
+            {
+                writerFull.WriteLine($"{lemma}\t{lemma}\t{gender},ед,0");
+            }
+            else
+            {
+            */
+            
+            foreach (XmlNode childNode in lemmaNode.SelectNodes(GetProperFnodesXpathQuery(additionalXpathFilter)) )
+            {
+                string form = childNode.Attributes["t"].Value.ToUpper();
+                switch (form)   //fix mistakes i dict.opencorpora (see https://github.com/petrovich/petrovich-eval/pull/2/commits/4c33042ae0aa46bfbe4e5e46a289e3137aaa9549)
+                {
+                case "ЖУРАВЛВЁОЙ":
+                    form = "ЖУРАВЛЁВОЙ";
+                    break;
+                case "КОВАЁВУ":
+                    form = "КОВАЛЁВУ";
+                    break;
+                }
+                string @case = ConvertCase(childNode, lemma);
+                if (@case == null)
+                {
+                    continue;   //unsupported weird case
+                }
+
+                if (! (
+                        (childNode.ChildNodes.Count == 2)
+                        || (childNode.ChildNodes.Count == 3 
+                                && childNode.ChildNodes.OfType<XmlNode>().Where(node => node.Attributes["v"].Value == "V-ie").Any()
+                            )
+                        )
+                    )
+                {
+                    throw new ApplicationException($"some strange info for lemma {lemma} in form {form}");
+                }
+                writerFull.WriteLine($"{lemma}\t{form}\t{gender},ед,{@case}");
             }
         }
 

@@ -134,6 +134,12 @@
     <Content Include="Data\firstnames.tsv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\midnames.gender.tsv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\midnames.tsv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Data\surnames.gender.tsv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
