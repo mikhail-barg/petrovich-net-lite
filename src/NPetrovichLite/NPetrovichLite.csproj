@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Case.cs" />
     <Compile Include="Gender.cs" />
+    <Compile Include="GenderRules.cs" />
     <Compile Include="JsonParser.cs" />
     <Compile Include="NamePart.cs" />
     <Compile Include="ParseException.cs" />
@@ -55,6 +56,11 @@
   <ItemGroup>
     <EmbeddedResource Include="..\rules\rules.json">
       <Link>rules.json</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\rules\gender.json">
+      <Link>gender.json</Link>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

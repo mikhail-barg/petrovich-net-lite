@@ -50,9 +50,9 @@ namespace NPetrovichLite
             m_rules = JsonRulesLoader.LoadEmbeddedResource();
         }
 
-        public Petrovich(string rulesFileName)
+        public Petrovich(string rulesFileName, string genderRulesFileName)
         {
-            m_rules = JsonRulesLoader.LoadFromFile(rulesFileName);
+            m_rules = JsonRulesLoader.LoadFromFile(rulesFileName, genderRulesFileName);
         }
 
         public string Inflect(string namePartValue, NamePart namePart, Case targetCase, Gender? gender = null)
@@ -103,13 +103,11 @@ namespace NPetrovichLite
             {
                 throw new ArgumentNullException(nameof(namePartValue));
             }
-            GenderRules rules = m_rules.genderRules[namePart];
-            foreach (KeyValuePair<string, Gender> pair in rules)
+            PartGenderRules rules = m_rules.genderRules[namePart];
+            Gender gender;
+            if (rules.TryMatch(namePartValue, out gender))
             {
-                if (namePartValue.EndsWith(pair.Key, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    return pair.Value;
-                }
+                return gender;
             }
             return Gender.Androgynous;
         }

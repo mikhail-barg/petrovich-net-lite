@@ -13,7 +13,7 @@ namespace NPetrovichLite.Tests.App
         {
             //NPetrovichLite.Tests.TestDataFactory.ReadSurnamesData().OfType<object[]>().ToList();
 
-            //Petrovich petrovich = new Petrovich(@"c:\Dev\_Projects\petrovich-net\src\rules\rules.json");
+            Petrovich petrovich = new Petrovich(@"..\..\..\rules\rules.json", @"..\..\..\rules\gender.json");
             /*
             Petrovich petrovich = new Petrovich();
             Console.WriteLine(petrovich.Inflect("Маша", NamePart.FirstName, Case.Dative));
