@@ -12,9 +12,9 @@ namespace NPetrovichLite
     {
         private const string RULES_RESOURCE_NAME = "NPetrovichLite.rules.json";
         private const string GENDER_RESOURCE_NAME = "NPetrovichLite.gender.json";
-        private static readonly int MODIFIERS_COUNT = Enum.GetValues(typeof(Case)).Length - 1;
+        private static readonly int MODIFIERS_COUNT = Enum.GetValues(typeof(Case)).Length - 1; //Nominal case is not listed in the rules, therefore -1
 
-        internal static RulesContainer LoadEmbeddedResource()
+        internal static RulesContainer LoadEmbeddedResources()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
             JsonRulesLoader loader;

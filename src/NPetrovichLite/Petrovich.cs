@@ -47,7 +47,7 @@ namespace NPetrovichLite
 
         public Petrovich()
         {
-            m_rules = JsonRulesLoader.LoadEmbeddedResource();
+            m_rules = JsonRulesLoader.LoadEmbeddedResources();
         }
 
         public Petrovich(string rulesFileName, string genderRulesFileName)
