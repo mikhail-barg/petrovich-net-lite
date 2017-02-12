@@ -12,34 +12,39 @@ namespace NPetrovichLite
     {
         private const string RULES_RESOURCE_NAME = "NPetrovichLite.rules.json";
         private const string GENDER_RESOURCE_NAME = "NPetrovichLite.gender.json";
-        private static readonly int MODIFIERS_COUNT = Enum.GetValues(typeof(Case)).Length - 1;  //Nominal case is not listed in the rules, therefore -1
+        private static readonly int MODIFIERS_COUNT = Enum.GetValues(typeof(Case)).Length - 1;
 
-        internal static RulesContainer LoadEmbeddedResources()
+        internal static RulesContainer LoadEmbeddedResource()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
-
-            JsonRulesLoader loader = new JsonRulesLoader();
-            using (StreamReader reader = new StreamReader(assembly.GetManifestResourceStream(RULES_RESOURCE_NAME)))
+            JsonRulesLoader loader;
+            using (Stream stream = assembly.GetManifestResourceStream(RULES_RESOURCE_NAME))
             {
-                loader.Load(reader);
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    loader = new JsonRulesLoader(reader);
+                }
             }
-            using (StreamReader reader = new StreamReader(assembly.GetManifestResourceStream(GENDER_RESOURCE_NAME)))
+            using (Stream stream = assembly.GetManifestResourceStream(GENDER_RESOURCE_NAME))
             {
-                loader.Load(reader);
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    loader.LoadGenderRules(reader);
+                }
             }
             return loader.m_data;
         }
 
-        internal static RulesContainer LoadFromFile(string rulesFileName, string genderFileName)
+        internal static RulesContainer LoadFromFile(string rulesFileName, string genderRulesFileName)
         {
-            JsonRulesLoader loader = new JsonRulesLoader();
+            JsonRulesLoader loader;
             using (StreamReader reader = new StreamReader(rulesFileName))
             {
-                loader.Load(reader);
+                loader = new JsonRulesLoader(reader);
             }
-            using (StreamReader reader = new StreamReader(genderFileName))
+            using (StreamReader reader = new StreamReader(genderRulesFileName))
             {
-                loader.Load(reader);
+                loader.LoadGenderRules(reader);
             }
             return loader.m_data;
         }
@@ -48,7 +53,7 @@ namespace NPetrovichLite
 
         private JsonParser m_parser;
 
-        private void Load(StreamReader reader)
+        private JsonRulesLoader(StreamReader reader)
         {
             m_parser = new JsonParser(reader);
 
@@ -61,20 +66,31 @@ namespace NPetrovichLite
             m_parser = null;
         }
 
-        private void ParseRuleSet()
+        private void LoadGenderRules(StreamReader reader)
         {
-            string rulePartName = m_parser.GetNextPropertyName();
+            m_parser = new JsonParser(reader);
 
+            m_parser.AssertNextTokenTypeAndConsume(JsonParser.TokenType.ObjectStart);
+            string rulePartName = m_parser.GetNextPropertyName();
             if (rulePartName == "gender")
             {
                 ParseGenderRulesContainer();
             }
             else
             {
-                NamePart rulePart = ParseNamePart(rulePartName);
-                PartRules rules = ParsePartRulesList();
-                m_data[rulePart] = rules;
+                throw new ParseException($"Failed to parse gender rules: no 'gender' object, got '{rulePartName}' instead");
             }
+            m_parser.CheckNextTokenTypeAndConsumeIfTrue(JsonParser.TokenType.ObjectEnd);
+            m_parser.CheckNextTokenTypeAndConsumeIfTrue(JsonParser.TokenType.ObjectEnd);
+            m_parser = null;
+        }
+
+        private void ParseRuleSet()
+        {
+            string rulePartName = m_parser.GetNextPropertyName();
+            NamePart rulePart = ParseNamePart(rulePartName);
+            PartRules rules = ParsePartRulesList();
+            m_data[rulePart] = rules;
         }
 
         private PartRules ParsePartRulesList()
@@ -219,22 +235,48 @@ namespace NPetrovichLite
             }
         }
 
-        private void ParseGenderRules(GenderRules rules)
+        private void ParseGenderRules(PartGenderRules rules)
         {
             m_parser.AssertNextTokenTypeAndConsume(JsonParser.TokenType.ObjectStart);
             while (!m_parser.CheckNextTokenTypeAndConsumeIfTrue(JsonParser.TokenType.ObjectEnd))
             {
-                string genderStr = m_parser.GetNextPropertyName();
-                Gender gender = ParseGender(genderStr);
-                m_parser.AssertNextTokenTypeAndConsume(JsonParser.TokenType.ArrayStart);
-                while (!m_parser.CheckNextTokenTypeAndConsumeIfTrue(JsonParser.TokenType.ArrayEnd))
+                string section = m_parser.GetNextPropertyName();
+
+                if (section == "exceptions")
                 {
-                    string suffix = m_parser.GetNextStringValue();
-                    if (rules.ContainsKey(suffix))
+                    m_parser.AssertNextTokenTypeAndConsume(JsonParser.TokenType.ObjectStart);
+                    while (!m_parser.CheckNextTokenTypeAndConsumeIfTrue(JsonParser.TokenType.ObjectEnd))
                     {
-                        throw new ParseException(String.Format("Duplicate suffix '{0}' for gender {1}", suffix, gender));
+                        //read exceptions rules
+                        string genderStr = m_parser.GetNextPropertyName();
+                        Gender gender = ParseGender(genderStr);
+                        m_parser.AssertNextTokenTypeAndConsume(JsonParser.TokenType.ArrayStart);
+                        while (!m_parser.CheckNextTokenTypeAndConsumeIfTrue(JsonParser.TokenType.ArrayEnd))
+                        {
+                            string word = m_parser.GetNextStringValue();
+                            rules.AddExplicitMatchRule(word, gender);
+                        }
                     }
-                    rules.Add(suffix, gender);
+                }
+                else if (section == "suffixes")
+                {
+                    m_parser.AssertNextTokenTypeAndConsume(JsonParser.TokenType.ObjectStart);
+                    while (!m_parser.CheckNextTokenTypeAndConsumeIfTrue(JsonParser.TokenType.ObjectEnd))
+                    {
+                        //read suffixes rule
+                        string genderStr = m_parser.GetNextPropertyName();
+                        Gender gender = ParseGender(genderStr);
+                        m_parser.AssertNextTokenTypeAndConsume(JsonParser.TokenType.ArrayStart);
+                        while (!m_parser.CheckNextTokenTypeAndConsumeIfTrue(JsonParser.TokenType.ArrayEnd))
+                        {
+                            string suffix = m_parser.GetNextStringValue();
+                            rules.AddSuffixRule(suffix, gender);
+                        }
+                    }
+                }
+                else
+                {
+                    throw new ParseException($"Unexpected section '{section}'");
                 }
             }
         }

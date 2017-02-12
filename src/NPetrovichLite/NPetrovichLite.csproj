@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Case.cs" />
     <Compile Include="Gender.cs" />
+    <Compile Include="GenderRules.cs" />
     <Compile Include="JsonParser.cs" />
     <Compile Include="NamePart.cs" />
     <Compile Include="ParseException.cs" />

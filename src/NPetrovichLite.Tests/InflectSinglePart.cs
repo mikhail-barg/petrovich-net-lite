@@ -30,6 +30,12 @@ namespace NPetrovichLite.Tests
         }
 
         [Test]
+        public void Test2()
+        {
+            Assert.AreEqual("Дарвином", petrovich.Inflect("Дарвин", NamePart.LastName, Case.Instrumental, Gender.Male));
+        }
+
+        [Test]
         [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.LastNamesData))]
         [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.FirstNamesData))]
         [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.MidNamesData))]
