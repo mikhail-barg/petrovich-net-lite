@@ -36,13 +36,13 @@ namespace NPetrovichLite.Tests
         }
 
         [Test]
-        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.LastNamesData))]
-        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.FirstNamesData))]
-        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.MidNamesData))]
-        public void TestSinglePartInflection(string value, NamePart part, Gender gender, Case targetCase, string expected)
+        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.OpencorporaInflectionData), new object[] { "surnames.misc.tsv", NamePart.LastName })]
+        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.OpencorporaInflectionData), new object[] { "firstnames.misc.tsv", NamePart.FirstName })]
+        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.OpencorporaInflectionData), new object[] { "midnames.misc.tsv", NamePart.MiddleName })]
+        public void TestSinglePartInflection(string value, NamePart part, Gender? gender, Case targetCase, string expected)
         {
             string result = petrovich.Inflect(value, part, targetCase, gender);
-            Assert.AreEqual(expected, result, string.Format("Part: {0}, Gender: {1}, Case: {2}", part, gender, targetCase));
+            Assert.AreEqual(expected, result, $"Value: {value}, Part: {part}, Gender: {gender}");
         }
     }
 }

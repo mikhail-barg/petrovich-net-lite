@@ -18,17 +18,15 @@ namespace NPetrovichLite.Tests
             petrovich = new Petrovich();
         }
 
-        [Test]
-        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.ReadGendersSingleData))]
-        public void TestSinglePartGender(string value, NamePart part, Gender expected)
+        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.OpencorporaGenderDetectionData), new object[] { "firstnames.popular.gender.tsv", NamePart.FirstName})]
+        public void TestGenderDetection(string value, NamePart part, Gender expected)
         {
-            Gender? gender = petrovich.GetGender(value, part);
-            Assert.AreEqual(expected, gender, string.Format("Part: {0}, Value: {1}", part, value));
+            Gender gender = petrovich.GetGender(value, part);
+            Assert.AreEqual(expected, gender, $"Value: {value} Part: {part}");
         }
 
-
         [Test]
-        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.ReadGendersMultipleData))]
+        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.ReadPeopleCombinedGenderData))]
         public void TestGenderDetection(string lastName, string firstName, string midName, Gender expected)
         {
             Gender? gender = petrovich.GetGender(lastName, firstName, midName);

@@ -73,24 +73,54 @@
     <Compile Include="TestDataFactory.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\Combined.csv">
+    <Content Include="..\eval\firstnames.gender.tsv">
+      <Link>Data\firstnames.gender.tsv</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Data\FirstNames.csv">
+    </Content>
+    <Content Include="..\eval\firstnames.misc.tsv">
+      <Link>Data\firstnames.misc.tsv</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Data\GendersMultiple.csv">
+    </Content>
+    <Content Include="..\eval\firstnames.popular.gender.tsv">
+      <Link>Data\firstnames.popular.gender.tsv</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Data\GendersSingle.csv">
+    </Content>
+    <Content Include="..\eval\firstnames.tsv">
+      <Link>Data\firstnames.tsv</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Data\LastNames.csv">
+    </Content>
+    <Content Include="..\eval\midnames.gender.tsv">
+      <Link>Data\midnames.gender.tsv</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Data\MiddleNames.csv">
+    </Content>
+    <Content Include="..\eval\midnames.misc.tsv">
+      <Link>Data\midnames.misc.tsv</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
+    <Content Include="..\eval\midnames.tsv">
+      <Link>Data\midnames.tsv</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\eval\people.gender.tsv">
+      <Link>Data\people.gender.tsv</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\eval\people.tsv">
+      <Link>Data\people.tsv</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\eval\surnames.gender.tsv">
+      <Link>Data\surnames.gender.tsv</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\eval\surnames.tsv">
+      <Link>Data\surnames.tsv</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\eval\surnames.misc.tsv">
+      <Link>Data\surnames.misc.tsv</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -98,26 +128,6 @@
       <Project>{41820b71-81dc-425a-84c7-1d1f8d2714a0}</Project>
       <Name>NPetrovichLite</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Data\firstnames.gender.tsv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\firstnames.tsv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\midnames.gender.tsv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\midnames.tsv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\surnames.gender.tsv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\surnames.tsv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

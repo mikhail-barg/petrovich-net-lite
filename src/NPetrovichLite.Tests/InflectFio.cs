@@ -36,6 +36,7 @@ namespace NPetrovichLite.Tests
             Assert.AreEqual("Ивановича", result.midName);
         }
 
+        /*
         [Test]
         [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.LastNamesData))]
         [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.FirstNamesData))]
@@ -65,9 +66,10 @@ namespace NPetrovichLite.Tests
             }
             
         }
+        */
 
         [Test]
-        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.ReadCombinedData))]
+        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.ReadPeopleCombinedInflectionData))]
         public void TestMultipleInflection(string lastName, string firstName, string midName, Gender? gender, Case @case, string expectedLast, string expectedFirst, string expectedMid)
         {
             Petrovich.FIO source = new Petrovich.FIO() {

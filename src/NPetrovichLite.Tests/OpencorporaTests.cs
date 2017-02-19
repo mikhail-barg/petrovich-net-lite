@@ -21,8 +21,8 @@ namespace NPetrovichLite.Tests
 
         /*
         [Test]
-        //[TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.OpencorporaInflectionData), new object[] { "surnames.tsv", NamePart.LastName })]
-        //[TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.OpencorporaInflectionData), new object[] { "firstnames.tsv", NamePart.FirstName })]
+        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.OpencorporaInflectionData), new object[] { "surnames.tsv", NamePart.LastName })]
+        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.OpencorporaInflectionData), new object[] { "firstnames.tsv", NamePart.FirstName })]
         [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.OpencorporaInflectionData), new object[] { "midnames.tsv", NamePart.MiddleName })]
         public void TestSinglePartInflection(string value, NamePart part, Gender? gender, Case targetCase, string expected)
         {
@@ -34,8 +34,8 @@ namespace NPetrovichLite.Tests
         /*
         [Test]
         [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.OpencorporaGenderDetectionData), new object[] { "surnames.gender.tsv", NamePart.LastName})]
-        //[TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.OpencorporaGenderDetectionData), new object[] { "firstnames.gender.tsv", NamePart.FirstName })]
-        //[TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.OpencorporaGenderDetectionData), new object[] { "midnames.gender.tsv", NamePart.MiddleName})]
+        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.OpencorporaGenderDetectionData), new object[] { "firstnames.gender.tsv", NamePart.FirstName })]
+        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.OpencorporaGenderDetectionData), new object[] { "midnames.gender.tsv", NamePart.MiddleName})]
         public void TestGenderDetection(string value, NamePart part, Gender expected)
         {
             Gender gender = petrovich.GetGender(value, part);

@@ -10,45 +10,6 @@ namespace NPetrovichLite.Tests
 {
     public sealed class TestDataFactory
     {
-        public static IEnumerable LastNamesData()
-        {
-            return ReadSinglePartData("LastNames.csv", NamePart.LastName);
-        }
-
-        public static IEnumerable FirstNamesData()
-        {
-            return ReadSinglePartData("FirstNames.csv", NamePart.FirstName);
-        }
-
-        public static IEnumerable MidNamesData()
-        {
-            return ReadSinglePartData("MiddleNames.csv", NamePart.MiddleName);
-        }
-
-        private static IEnumerable ReadSinglePartData(string fileName, NamePart part)
-        {
-            using (StreamReader reader = new StreamReader(Path.Combine(NUnit.Framework.TestContext.CurrentContext.TestDirectory, "Data", fileName)))
-            {
-                string line;
-                line = reader.ReadLine();  //skip header
-                while ((line = reader.ReadLine()) != null)
-                {
-                    if (string.IsNullOrWhiteSpace(line))
-                    {
-                        continue;
-                    }
-
-                    string[] chunks = line.Split(',').Select(s => s.Trim()).ToArray();
-
-                    Gender gender = (Gender)Enum.Parse(typeof(Gender), chunks[1]);
-                    Case @case = (Case)Enum.Parse(typeof(Case), chunks[2]);
-
-                    yield return new object[] { chunks[0], part, gender, @case, chunks[3] };
-                }
-            }
-        }
-
-        #region opencorpora files
         private static Gender[] MALE_GENDER_LIST = new Gender[] { Gender.Male };
         private static Gender[] FEMALE_GENDER_LIST = new Gender[] { Gender.Female };
         private static Gender[] BOTH_GENDER_LIST = new Gender[] { Gender.Female, Gender.Male };
@@ -66,48 +27,10 @@ namespace NPetrovichLite.Tests
                     }
 
                     string[] chunks = line.ToLower().Split('\t').Select(s => s.Trim()).ToArray();
-                    string[] chunks2 = chunks[2].Split(',');
 
-                    if (chunks2.Length > 3)
+                    foreach (Tuple<Gender, Case> inflection in ParseGrammemes(chunks[2]))
                     {
-                        //weird lines "ЦЕЛИЙ	ЦЕЛИЙ	мр,имя,ед,им"
-                        continue;
-                    }
-
-                    Gender[] genders;
-                    switch (chunks2[0])
-                    {
-                    case "жр":
-                        genders = FEMALE_GENDER_LIST;
-                        break;
-                    case "мр":
-                        genders = MALE_GENDER_LIST;
-                        break;
-                    case "мр-жр":
-                        genders = BOTH_GENDER_LIST;
-                        break;                    
-                    default:
-                        throw new ApplicationException($"Unexpected gender string '{chunks2[0]}'");
-                    }
-
-                    if (chunks2[2] == "0")
-                    {
-                        //actually, '0' in 'case' column means that the test valid for all cases
-                        foreach (Gender gender in genders)
-                        {
-                            foreach (Case @case in Enum.GetValues(typeof(Case)))
-                            {
-                                yield return new object[] { chunks[0], namePart, gender, @case, chunks[1] };
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Case @case = Parse2LetterCase(chunks2[2]);
-                        foreach (Gender gender in genders)
-                        {
-                            yield return new object[] { chunks[0], namePart, gender, @case, chunks[1] };
-                        }
+                        yield return new object[] { chunks[0], namePart, inflection.Item1, inflection.Item2, chunks[1] };
                     }
                 }
             }
@@ -126,25 +49,60 @@ namespace NPetrovichLite.Tests
                         continue;
                     }
 
-                    string[] chunks = line.ToLower().Split('\t').Select(s => s.Trim()).ToArray();
-
-                    Gender gender;
-                    switch (chunks[1])
-                    {
-                    case "жр":
-                        gender = Gender.Female;
-                        break;
-                    case "мр":
-                        gender = Gender.Male;
-                        break;
-                    case "мр-жр":
-                        gender = Gender.Androgynous;
-                        break;
-                    default:
-                        throw new ApplicationException($"Unexpected gender string '{chunks[1]}'");
-                    }
+                    string[] chunks = line.ToLower()
+                        .Split('\t')
+                        .Select(s => s.Trim())
+                        .ToArray();
+                    Gender gender = ParseGenderForGenderDetection(chunks[1]);
 
                     yield return new object[] { chunks[0], namePart, gender};
+                }
+            }
+        }
+
+        private static IEnumerable<Tuple<Gender, Case>> ParseGrammemes(string grammemes)
+        {
+            string[] chunks2 = grammemes.Split(',');
+
+            if (chunks2.Length > 3)
+            {
+                //weird lines "ЦЕЛИЙ	ЦЕЛИЙ	мр,имя,ед,им"
+                yield break;
+            }
+
+            Gender[] genders;
+            switch (chunks2[0])
+            {
+            case "жр":
+                genders = FEMALE_GENDER_LIST;
+                break;
+            case "мр":
+                genders = MALE_GENDER_LIST;
+                break;
+            case "мр-жр":
+                genders = BOTH_GENDER_LIST;
+                break;
+            default:
+                throw new ApplicationException($"Unexpected gender string '{chunks2[0]}'");
+            }
+
+            if (chunks2[2] == "0")
+            {
+                //actually, '0' in 'case' column means that the test valid for all cases
+                foreach (Gender gender in genders)
+                {
+                    foreach (Case @case in Enum.GetValues(typeof(Case)))
+                    {
+                        yield return Tuple.Create(gender, @case);
+                    }
+                }
+            }
+            else
+            {
+                Case @case = Parse2LetterCase(chunks2[2]);
+                foreach (Gender gender in genders)
+                {
+                    yield return Tuple.Create(gender, @case);
                 }
             }
         }
@@ -169,14 +127,31 @@ namespace NPetrovichLite.Tests
                 throw new ApplicationException("Bad value: '" + value + "'");
             }
         }
-        #endregion
 
-        public static IEnumerable ReadGendersSingleData()
+        private static Gender ParseGenderForGenderDetection(string genderStr)
         {
-            using (StreamReader reader = new StreamReader(Path.Combine(NUnit.Framework.TestContext.CurrentContext.TestDirectory, "Data", "GendersSingle.csv")))
+            switch (genderStr)
+            {
+            case "жр":
+                return Gender.Female;
+            case "мр":
+                return Gender.Male;
+            case "мр-жр":
+                return Gender.Androgynous;
+            default:
+                throw new ApplicationException($"Unexpected gender string '{genderStr}'");
+            }
+        }
+
+        public static IEnumerable ReadPeopleCombinedGenderData()
+        {
+            using (StreamReader reader = new StreamReader(Path.Combine(NUnit.Framework.TestContext.CurrentContext.TestDirectory, "Data", "people.gender.tsv")))
             {
                 string line;
-                line = reader.ReadLine();  //skip header
+                line = reader.ReadLine();
+                //skip header
+                //lastname	firstname	middlename	gender
+                //0         1           2           3
                 while ((line = reader.ReadLine()) != null)
                 {
                     if (string.IsNullOrWhiteSpace(line))
@@ -184,21 +159,28 @@ namespace NPetrovichLite.Tests
                         continue;
                     }
 
-                    string[] chunks = line.Split(',').Select(s => s.Trim()).ToArray();
-                    Gender gender = (Gender)Enum.Parse(typeof(Gender), chunks[0]);
-                    NamePart namePart = (NamePart)Enum.Parse(typeof(NamePart), chunks[1]);
+                    string[] chunks = line.ToLower()
+                        .Split('\t')
+                        .Select(s => s.Trim())
+                        .Select(s => String.IsNullOrWhiteSpace(s) ? null : s)
+                        .ToArray();
 
-                    yield return new object[] { chunks[2], namePart, gender };
+                    Gender gender = ParseGenderForGenderDetection(chunks[3]);
+
+                    yield return new object[] { chunks[0], chunks[1], chunks[2], gender };
                 }
             }
         }
 
-        public static IEnumerable ReadGendersMultipleData()
+        public static IEnumerable ReadPeopleCombinedInflectionData()
         {
-            using (StreamReader reader = new StreamReader(Path.Combine(NUnit.Framework.TestContext.CurrentContext.TestDirectory, "Data", "GendersMultiple.csv")))
+            using (StreamReader reader = new StreamReader(Path.Combine(NUnit.Framework.TestContext.CurrentContext.TestDirectory, "Data", "people.tsv")))
             {
                 string line;
                 line = reader.ReadLine();  //skip header
+                //header is 
+                //0         1           2       3                   4                   5                   6
+                //lastname	firstname	midname	lastname_expected	firstname_expected	middlename_expected	grammemes
                 while ((line = reader.ReadLine()) != null)
                 {
                     if (string.IsNullOrWhiteSpace(line))
@@ -206,36 +188,16 @@ namespace NPetrovichLite.Tests
                         continue;
                     }
 
-                    string[] chunks = line.Split(',')
-                        .Select(s => String.IsNullOrWhiteSpace(s)? null : s.Trim())
+                    string[] chunks = line.ToLower()
+                        .Split('\t')
+                        .Select(s => s.Trim())
+                        .Select(s => String.IsNullOrWhiteSpace(s) ? null : s)
                         .ToArray();
-                    Gender gender = (Gender)Enum.Parse(typeof(Gender), chunks[0]);
 
-                    yield return new object[] { chunks[1], chunks[2], chunks[3], gender };
-                }
-            }
-        }
-
-        public static IEnumerable ReadCombinedData()
-        {
-            using (StreamReader reader = new StreamReader(Path.Combine(NUnit.Framework.TestContext.CurrentContext.TestDirectory, "Data", "Combined.csv")))
-            {
-                string line;
-                line = reader.ReadLine();  //skip header
-                while ((line = reader.ReadLine()) != null)
-                {
-                    if (string.IsNullOrWhiteSpace(line))
+                    foreach (Tuple<Gender, Case> inflection in ParseGrammemes(chunks[6]))
                     {
-                        continue;
+                        yield return new object[] { chunks[0], chunks[1], chunks[2], inflection.Item1, inflection.Item2, chunks[3], chunks[4], chunks[5] };
                     }
-
-                    string[] chunks = line.Split(',')
-                        .Select(s => String.IsNullOrWhiteSpace(s) ? null : s.Trim())
-                        .ToArray();
-                    Gender? gender = chunks[0] == null? null : (Gender?)Enum.Parse(typeof(Gender), chunks[0]);
-                    Case @case = (Case)Enum.Parse(typeof(Case), chunks[4]);
-
-                    yield return new object[] { chunks[1], chunks[2], chunks[3], gender, @case, chunks[5], chunks[6], chunks[7] };
                 }
             }
         }
