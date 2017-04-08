@@ -36,7 +36,9 @@ namespace NPetrovichLite.Tests
             Assert.AreEqual("Ивановича", result.midName);
         }
 
-        /*
+        
+#pragma warning disable S125 // Sections of code should not be "commented out"
+/*
         [Test]
         [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.LastNamesData))]
         [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.FirstNamesData))]
@@ -69,6 +71,7 @@ namespace NPetrovichLite.Tests
         */
 
         [Test]
+#pragma warning restore S125 // Sections of code should not be "commented out"
         [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.ReadPeopleCombinedInflectionData))]
         public void TestMultipleInflection(string lastName, string firstName, string midName, Gender? gender, Case @case, string expectedLast, string expectedFirst, string expectedMid)
         {

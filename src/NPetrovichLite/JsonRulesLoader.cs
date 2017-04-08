@@ -18,19 +18,14 @@ namespace NPetrovichLite
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
             JsonRulesLoader loader;
-            using (Stream stream = assembly.GetManifestResourceStream(RULES_RESOURCE_NAME))
+            using (StreamReader reader = new StreamReader(assembly.GetManifestResourceStream(RULES_RESOURCE_NAME)))
             {
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    loader = new JsonRulesLoader(reader);
-                }
+                loader = new JsonRulesLoader(reader);
             }
-            using (Stream stream = assembly.GetManifestResourceStream(GENDER_RESOURCE_NAME))
+
+            using (StreamReader reader = new StreamReader(assembly.GetManifestResourceStream(GENDER_RESOURCE_NAME)))
             {
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    loader.LoadGenderRules(reader);
-                }
+                loader.LoadGenderRules(reader);
             }
             return loader.m_data;
         }
@@ -154,10 +149,13 @@ namespace NPetrovichLite
             {
                 throw new ParseException("Failed to parse rule, no gender specified");
             }
+            #pragma warning disable S2583 // Conditions should not unconditionally evaluate to "true" or to "false" - False positive
             if (test == null)
             {
                 throw new ParseException("Failed to parse rule, no test strings specified");
             }
+            #pragma warning restore S2583
+
             if (modifiers == null)
             {
                 throw new ParseException("Failed to parse rule, no modifiers specified");
