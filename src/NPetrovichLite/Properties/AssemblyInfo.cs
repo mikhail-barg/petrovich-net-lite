@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("NPetrovichLite")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A more light-weight .Net port of Petrovich - склонение русских фамилий, имен и отчеств. See also official .Net port https://github.com/petrovich/petrovich-net")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Mikhail Barg")]
 [assembly: AssemblyProduct("NPetrovichLite")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCopyright("Copyright ©  2016 Mikhail Barg")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
