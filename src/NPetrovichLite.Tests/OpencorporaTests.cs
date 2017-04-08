@@ -19,6 +19,7 @@ namespace NPetrovichLite.Tests
         }
 
 
+#if !DEBUG
         /*
         [Test]
         [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.OpencorporaInflectionData), new object[] { "surnames.tsv", NamePart.LastName })]
@@ -31,16 +32,15 @@ namespace NPetrovichLite.Tests
         }
         */
 
-        /*
         [Test]
         [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.OpencorporaGenderDetectionData), new object[] { "surnames.gender.tsv", NamePart.LastName})]
-        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.OpencorporaGenderDetectionData), new object[] { "firstnames.gender.tsv", NamePart.FirstName })]
-        [TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.OpencorporaGenderDetectionData), new object[] { "midnames.gender.tsv", NamePart.MiddleName})]
+        //[TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.OpencorporaGenderDetectionData), new object[] { "firstnames.gender.tsv", NamePart.FirstName })]
+        //[TestCaseSource(typeof(TestDataFactory), nameof(TestDataFactory.OpencorporaGenderDetectionData), new object[] { "midnames.gender.tsv", NamePart.MiddleName})]
         public void TestGenderDetection(string value, NamePart part, Gender expected)
         {
             Gender gender = petrovich.GetGender(value, part);
             Assert.AreEqual(expected, gender, $"Value: {value} Part: {part}");
         }
-        */
+#endif
     }
 }
