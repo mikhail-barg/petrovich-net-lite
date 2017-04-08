@@ -18,6 +18,32 @@ namespace OpenCorporaParser
         private const string dictArcFile = @"dict.opcorpora.xml.zip";
         private const string dictFile = @"dict.opcorpora.xml";
 
+        private static readonly HashSet<string> explicitBothGendersSurnameLemmas = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase) {
+            "меркьюри",
+            "орджоникидзе",
+            "прусак",
+            "ферма",
+            "обама",
+            "борхес",
+            "чавес",
+            "самуцевич",
+            "гордон",
+            "щерба",
+            "савонарола",
+            "гоголь",
+            "меркель",
+            "пэйлин",
+            "толкиен",
+            "остер",
+            "гегель",
+            "кортасар",
+            "джобс",
+            "бор",
+            "цукерберг",
+            "ромм",
+            "хокинг"
+        };
+
         static void Main(string[] args)
         {
 
@@ -82,6 +108,15 @@ namespace OpenCorporaParser
                 {
                     XmlNode lemmaSubNode = lemmaNode["l"];
                     string lemma = lemmaSubNode.Attributes["t"].Value.ToUpper();
+
+                    if (lemma == "МИХАИЛОВИЧ" 
+                        || lemma == "МИХАИЛОВНА"
+                        )
+                    {
+                        Console.WriteLine($"Skipping lemma {lemma}");
+                        continue;
+                    }
+
                     List<string> grammemes = lemmaSubNode.OfType<XmlNode>().Select(g => g.Attributes["v"].Value).ToList();
                     string gender = null;
                     //bool isFixed = false;
@@ -123,12 +158,19 @@ namespace OpenCorporaParser
                             }
                             gender = "мр-жр";
                             break;
-                        case "Ms-f":    //общий род
-                            if (gender == null)
+                        case "ms-f":    //общий род
+                            if (gender != null && gender != "мр-жр")
                             {
                                 throw new ApplicationException($"Two genders for lemma {lemma}");
                             }
-                            //gender = "мр-жр";
+                            gender = "мр-жр";
+                            break;
+                        case "Ms-f":
+                            //sometimes duplicates
+                            if (gender == null)
+                            {
+                                throw new ApplicationException($"No gender for lemma {lemma}");
+                            }
                             break;
                         case "Fixd":
                             //isFixed = true; //for fixed 
@@ -149,7 +191,7 @@ namespace OpenCorporaParser
                     if (weirdVieMidname.Count == 0)
                     {
                         //normal case
-                        ProcessWriteLemma(lemma, gender, lemmaToGender, lemmaNode, null, writerFull);
+                        ProcessWriteLemma(lemma, gender, namePart, lemmaToGender, lemmaNode, null, writerFull);
                     }
                     else
                     {
@@ -170,11 +212,11 @@ namespace OpenCorporaParser
                         //
                         // we need to read actual lemmas from <f>
                         lemma = weirdVieMidname[0].Attributes["t"].Value.ToUpper();
-                        ProcessWriteLemma(lemma, gender, lemmaToGender, lemmaNode, @"g[@v=""V-ie""]", writerFull);
+                        ProcessWriteLemma(lemma, gender, namePart, lemmaToGender, lemmaNode, @"g[@v=""V-ie""]", writerFull);
 
                         XmlNodeList normalMidname = lemmaNode.SelectNodes(GetProperFnodesXpathQuery(@"not(g[@v=""V-ie""]) and g[@v=""nomn""]"));
                         lemma = normalMidname[0].Attributes["t"].Value.ToUpper();
-                        ProcessWriteLemma(lemma, gender, lemmaToGender, lemmaNode, @"not(g[@v=""V-ie""])", writerFull);
+                        ProcessWriteLemma(lemma, gender, namePart, lemmaToGender, lemmaNode, @"not(g[@v=""V-ie""])", writerFull);
                     }
                 }
             }
@@ -205,7 +247,7 @@ namespace OpenCorporaParser
                     ]";
         }
 
-        private static void ProcessWriteLemma(string lemma, string gender, OrderedDictionary lemmaToGender, XmlNode lemmaNode, string additionalXpathFilter, StreamWriter writerFull)
+        private static void ProcessWriteLemma(string lemma, string gender, string namePart, OrderedDictionary lemmaToGender, XmlNode lemmaNode, string additionalXpathFilter, StreamWriter writerFull)
         {
             if (lemmaToGender.Contains(lemma))
             {
@@ -222,6 +264,10 @@ namespace OpenCorporaParser
             }
             else
             {
+                if (namePart == "surnames" && explicitBothGendersSurnameLemmas.Contains(lemma))
+                {
+                    gender = "мр-жр";
+                }
                 lemmaToGender[lemma] = gender;
             }
 
