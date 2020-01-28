@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Mikhail Barg</Authors>
     <Description>A more light-weight .Net port of Petrovich - склонение русских фамилий, имен и отчеств. See also official .Net port https://github.com/petrovich/petrovich-net</Description>
     <Copyright>Copyright ©  2016-2020 Mikhail Barg</Copyright>
