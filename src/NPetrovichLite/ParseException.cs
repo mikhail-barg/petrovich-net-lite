@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace NPetrovichLite
 {
-    [Serializable]
     internal sealed class ParseException : Exception
     {
         internal ParseException(string message)

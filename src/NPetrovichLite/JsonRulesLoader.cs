@@ -16,7 +16,7 @@ namespace NPetrovichLite
 
         internal static RulesContainer LoadEmbeddedResources()
         {
-            Assembly assembly = Assembly.GetExecutingAssembly();
+            Assembly assembly = typeof(RulesContainer).Assembly;
             JsonRulesLoader loader;
             using (StreamReader reader = new StreamReader(assembly.GetManifestResourceStream(RULES_RESOURCE_NAME)))
             {
