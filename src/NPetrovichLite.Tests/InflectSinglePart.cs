@@ -30,6 +30,15 @@ namespace NPetrovichLite.Tests
         }
 
         [Test]
+        public void LoveTest()
+        {
+            Assert.AreEqual(Gender.Male, petrovich.GetGender("Рауль", NamePart.FirstName));
+            Assert.AreEqual(Gender.Female, petrovich.GetGender("Руфь", NamePart.FirstName));
+            Assert.AreEqual(Gender.Female, petrovich.GetGender("Любовь", NamePart.FirstName));
+            Assert.AreEqual("Любови", petrovich.Inflect("Любовь", NamePart.FirstName, Case.Dative));
+        }
+
+        [Test]
         public void Test2()
         {
             Assert.AreEqual("Дарвином", petrovich.Inflect("Дарвин", NamePart.LastName, Case.Instrumental, Gender.Male));
