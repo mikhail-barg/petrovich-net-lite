@@ -1,6 +1,6 @@
 [submodule "src/rules"]
 	path = src/rules
-	url = https://github.com/evsergey/petrovich-rules.git
+	url = https://github.com/petrovich/petrovich-rules.git
 [submodule "src/eval"]
 	path = src/eval
 	url = https://github.com/petrovich/petrovich-eval.git
