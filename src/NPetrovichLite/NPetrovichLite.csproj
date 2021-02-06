@@ -15,16 +15,25 @@
     <PackageProjectUrl>https://github.com/mikhail-barg/petrovich-net-lite</PackageProjectUrl>
     <PackageIcon>petrovich.png</PackageIcon>
     <PackageIconUrl />
-    <RepositoryUrl>https://github.com/mikhail-barg/petrovich-net-lite</RepositoryUrl>
     <PackageTags>Petrovich Case Inflection Russian Names</PackageTags>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Version>1.2.0</Version>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <Version>1.2.1</Version>
+
+    <!-- see https://github.com/dotnet/sourcelink/blob/master/docs/README.md#continuousintegrationbuild -->
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <DeterministicSourcePaths>true</DeterministicSourcePaths>
+    
   </PropertyGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="..\rules\gender.json" Link="gender.json" />
     <EmbeddedResource Include="..\rules\rules.json" Link="rules.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
