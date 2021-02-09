@@ -3,6 +3,7 @@
 См. также [официальный C#-порт (NPetrovich)](https://github.com/petrovich/petrovich-net)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/0pep5lf0o67wnb1r?svg=true)](https://ci.appveyor.com/project/mikhail-barg/petrovich-net-lite)
+[![NuGet](https://img.shields.io/nuget/v/NPetrovichLite.svg)](https://www.nuget.org/packages/NPetrovichLite/)
 
 ## API
 Весь публичный API доступен через класс Petrovich. Функционал:
