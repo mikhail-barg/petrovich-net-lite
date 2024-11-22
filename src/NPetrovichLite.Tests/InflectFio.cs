@@ -28,12 +28,12 @@ namespace NPetrovichLite.Tests
             };
 
             Petrovich.FIO result = petrovich.Inflect(fio, Case.Nominative);
-            Assert.AreEqual(fio, result);
+            Assert.That(fio.Equals(result));
 
             result = petrovich.Inflect(fio, Case.Genitive);
-            Assert.AreEqual("Иванова", result.lastName);
-            Assert.AreEqual("Ивана", result.firstName);
-            Assert.AreEqual("Ивановича", result.midName);
+            Assert.That("Иванова".Equals(result.lastName));
+            Assert.That("Ивана".Equals(result.firstName));
+            Assert.That("Ивановича".Equals(result.midName));
         }
 
         
@@ -81,9 +81,9 @@ namespace NPetrovichLite.Tests
                 midName = midName
             };
             Petrovich.FIO result = petrovich.Inflect(source, @case, gender);
-            Assert.AreEqual(expectedLast, result.lastName, string.Format("Part: {0}, Gender: {1}, Case: {2}", NamePart.LastName, gender, @case));
-            Assert.AreEqual(expectedFirst, result.firstName, string.Format("Part: {0}, Gender: {1}, Case: {2}", NamePart.FirstName, gender, @case));
-            Assert.AreEqual(expectedMid, result.midName, string.Format("Part: {0}, Gender: {1}, Case: {2}", NamePart.MiddleName, gender, @case));
+            Assert.That(result.lastName, Is.EqualTo(expectedLast), string.Format("Part: {0}, Gender: {1}, Case: {2}", NamePart.LastName, gender, @case));
+            Assert.That(result.firstName, Is.EqualTo(expectedFirst), string.Format("Part: {0}, Gender: {1}, Case: {2}", NamePart.FirstName, gender, @case));
+            Assert.That(result.midName, Is.EqualTo(expectedMid), string.Format("Part: {0}, Gender: {1}, Case: {2}", NamePart.MiddleName, gender, @case));
         }
     }
 }

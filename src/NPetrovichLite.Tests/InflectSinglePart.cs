@@ -21,27 +21,27 @@ namespace NPetrovichLite.Tests
         [Test]
         public void Test01()
         {
-            Assert.AreEqual("Иванов", petrovich.Inflect("Иванов", NamePart.LastName, Case.Nominative, Gender.Male));
-            Assert.AreEqual("Иванова", petrovich.Inflect("Иванов", NamePart.LastName, Case.Genitive, Gender.Male));
-            Assert.AreEqual("Иванову", petrovich.Inflect("Иванов", NamePart.LastName, Case.Dative, Gender.Male));
-            Assert.AreEqual("Иванова", petrovich.Inflect("Иванов", NamePart.LastName, Case.Accusative, Gender.Male));
-            Assert.AreEqual("Ивановым", petrovich.Inflect("Иванов", NamePart.LastName, Case.Instrumental, Gender.Male));
-            Assert.AreEqual("Иванове", petrovich.Inflect("Иванов", NamePart.LastName, Case.Prepositional, Gender.Male));
+            Assert.That("Иванов".Equals(petrovich.Inflect("Иванов", NamePart.LastName, Case.Nominative, Gender.Male)));
+            Assert.That("Иванова".Equals(petrovich.Inflect("Иванов", NamePart.LastName, Case.Genitive, Gender.Male)));
+            Assert.That("Иванову".Equals(petrovich.Inflect("Иванов", NamePart.LastName, Case.Dative, Gender.Male)));
+            Assert.That("Иванова".Equals(petrovich.Inflect("Иванов", NamePart.LastName, Case.Accusative, Gender.Male)));
+            Assert.That("Ивановым".Equals(petrovich.Inflect("Иванов", NamePart.LastName, Case.Instrumental, Gender.Male)));
+            Assert.That("Иванове".Equals(petrovich.Inflect("Иванов", NamePart.LastName, Case.Prepositional, Gender.Male)));
         }
 
         [Test]
         public void LoveTest()
         {
-            Assert.AreEqual(Gender.Male, petrovich.GetGender("Рауль", NamePart.FirstName));
-            Assert.AreEqual(Gender.Female, petrovich.GetGender("Руфь", NamePart.FirstName));
-            Assert.AreEqual(Gender.Female, petrovich.GetGender("Любовь", NamePart.FirstName));
-            Assert.AreEqual("Любови", petrovich.Inflect("Любовь", NamePart.FirstName, Case.Dative));
+            Assert.That(Gender.Male.Equals(petrovich.GetGender("Рауль", NamePart.FirstName)));
+            Assert.That(Gender.Female.Equals(petrovich.GetGender("Руфь", NamePart.FirstName)));
+            Assert.That(Gender.Female.Equals(petrovich.GetGender("Любовь", NamePart.FirstName)));
+            Assert.That("Любови".Equals(petrovich.Inflect("Любовь", NamePart.FirstName, Case.Dative)));
         }
 
         [Test]
         public void Test2()
         {
-            Assert.AreEqual("Дарвином", petrovich.Inflect("Дарвин", NamePart.LastName, Case.Instrumental, Gender.Male));
+            Assert.That("Дарвином".Equals(petrovich.Inflect("Дарвин", NamePart.LastName, Case.Instrumental, Gender.Male)));
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace NPetrovichLite.Tests
         public void TestSinglePartInflection(string value, NamePart part, Gender? gender, Case targetCase, string expected)
         {
             string result = petrovich.Inflect(value, part, targetCase, gender);
-            Assert.AreEqual(expected, result, $"Value: {value}, Part: {part}, Gender: {gender}");
+            Assert.That(expected.Equals(result), $"Value: {value}, Part: {part}, Gender: {gender}");
         }
     }
 }

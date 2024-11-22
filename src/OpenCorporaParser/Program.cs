@@ -47,6 +47,7 @@ namespace OpenCorporaParser
         static void Main(string[] args)
         {
 
+#pragma warning disable SYSLIB0014  // 'WebClient.WebClient()' is obsolete
             Console.WriteLine($"Downloading {dictArcFile} from OpenCorpora");
             if (!File.Exists(dictArcFile))
             {
@@ -59,6 +60,7 @@ namespace OpenCorporaParser
             {
                 Console.WriteLine("Already exists");
             }
+#pragma warning restore SYSLIB0014
 
             Console.WriteLine($"Unpacking to {dictFile}");
             if (!File.Exists(dictFile))

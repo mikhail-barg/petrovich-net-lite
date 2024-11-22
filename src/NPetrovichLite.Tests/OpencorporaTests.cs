@@ -39,7 +39,7 @@ namespace NPetrovichLite.Tests
         public void TestGenderDetection(string value, NamePart part, Gender expected)
         {
             Gender gender = petrovich.GetGender(value, part);
-            Assert.AreEqual(expected, gender, $"Value: {value} Part: {part}");
+            Assert.That(gender, Is.EqualTo(expected), $"Value: {value} Part: {part}");
         }
 #endif
     }

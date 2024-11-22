@@ -22,7 +22,7 @@ namespace NPetrovichLite.Tests
         public void TestGenderDetection(string value, NamePart part, Gender expected)
         {
             Gender gender = petrovich.GetGender(value, part);
-            Assert.AreEqual(expected, gender, $"Value: {value} Part: {part}");
+            Assert.That(expected.Equals(gender), $"Value: {value} Part: {part}");
         }
 
         [Test]
@@ -30,7 +30,7 @@ namespace NPetrovichLite.Tests
         public void TestGenderDetection(string lastName, string firstName, string midName, Gender expected)
         {
             Gender? gender = petrovich.GetGender(lastName, firstName, midName);
-            Assert.AreEqual(expected, gender, string.Format("last: {0}, first: {1}, mid: {2}", lastName, firstName, midName));
+            Assert.That(expected.Equals(gender), String.Format("last: {0}, first: {1}, mid: {2}", lastName, firstName, midName));
         }
     }
 }
